@@ -1,0 +1,6 @@
+@DeskFlow_HostAddress = http://localhost:5211
+
+GET {{DeskFlow_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
