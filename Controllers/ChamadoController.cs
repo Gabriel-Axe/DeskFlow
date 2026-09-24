@@ -10,39 +10,30 @@ namespace DeskFlow.Controllers;
 public class ChamadoController : ControllerBase
 {
   //WARN: Substitutir isto por um repositorio
-  private List<Chamado> chamados => new();
+  // private List<Chamado> chamados => new();
+  private IChamadoRepository _chamadoRepository;
+  public ChamadoController(IChamadoRepository repository)
+  {
+    _chamadoRepository = repository;
+  }
 
   [HttpPost]
   // public Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
-  public IActionResult CriarNovoChamado([FromBody] Chamado chamado)
+  public async Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
   {
-    chamados.Add(chamado); // WARN: Talvez lista nao de pra adicionar async,
-                          // ou to fazendo errado
+    await _chamadoRepository.RegistrarChamado(chamado);
     return Ok();
   }
 
   [HttpPost("{id}/iniciar")]
   public IActionResult IniciarAtendimento([FromRoute] int id) {
-    var chamado = chamados.Find(c => c.Id == id);
-    if (chamado == null) return Ok();
-    chamado.Status = ChamadoStatus.EM_ANDAMENTO;
-    // NOTE: Pesquisar como atualizar no banco
-    return Ok();
+    // WARN: Muito curto?
+    return _chamadoRepository.IniciarAtendimento(id);
   }
 
   [HttpPost("{id}/encerrar")]
   public IActionResult EncerrarAtendimento([FromRoute] int id) {
-    var chamado = chamados.Find(c => c.Id == id);
-    if (chamado == null) return Ok();
-    chamado.Status = ChamadoStatus.FECHADO;
-    // NOTE: Pesquisar como atualizar no banco
-    return Ok();
+    // WARN: Denovo, muito curto...
+    _chamadoRepository.EncerrarChamado(id);
   }
-
-  // WARN: Temporario
-  // NOTE: Pesquisar como retornar lista de coisas
-  // [HttpGet]
-  // public Task<IActionResult> EncerrarAtendimento([FromRoute] int id) {
-  //   // return Ok(chamados);
-  // }
 }
