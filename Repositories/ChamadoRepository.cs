@@ -29,24 +29,25 @@ public class ChamadoRepository : IChamadoRepository
     return chamado;
   }
 
-	 public async Task<IActionResult> IniciarAtendimento(int id)
+  // NOTE: Eh retornado o chamado nullavel para garantir que a operacao
+  // teve sucesso
+  // Era isso ou true e false
+	 public async Task<Chamado?> IniciarAtendimento(int id)
 	{
     var chamado = await ObterPorId(id);
-    if (chamado is null)
-    {
-      return NotFound();
-    }
+    if (chamado is null) return null;
 
     chamado.Status = ChamadoStatus.EM_ANDAMENTO;
     await _context.SaveChangesAsync();
+    return chamado;
 	}
 
-	 public async Task<IActionResult> EncerrarChamado(int id)
+	 public async Task<Chamado?> EncerrarChamado(int id)
 	 {
       var chamado = await ObterPorId(id);
-      if (chamado is null) return NotFound();
+      if (chamado is null) return null;
       chamado.Status = ChamadoStatus.FECHADO;
       _context.SaveChangesAsync();
-      return Ok();
+      return chamado;
 	 }
 }

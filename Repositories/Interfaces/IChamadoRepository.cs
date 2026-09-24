@@ -6,11 +6,11 @@ namespace DeskFlow;
 
 public interface IChamadoRepository
 {
-  public async Task RegistrarChamado(Chamado chamado);
-  public async Task<Chamado> ObterPorId(int id);
+  public Task RegistrarChamado(Chamado chamado);
+  public Task<Chamado> ObterPorId(int id);
   // WARN: IActionResult pode, talvez n sei, gerar
   // acoplamento com ASP.NET?
-  public Task<IActionResult> IniciarAtendimento(int id);
-  public Task<IActionResult> EncerrarChamado(int id);
+  public Task<Chamado?> IniciarAtendimento(int id);
+  public Task<Chamado?> EncerrarChamado(int id);
   // public Task<List<Chamado>> ListarChamados();
 }

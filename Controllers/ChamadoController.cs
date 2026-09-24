@@ -26,14 +26,20 @@ public class ChamadoController : ControllerBase
   }
 
   [HttpPost("{id}/iniciar")]
-  public IActionResult IniciarAtendimento([FromRoute] int id) {
+  public async Task<IActionResult> IniciarAtendimento([FromRoute] int id) {
     // WARN: Muito curto?
-    return _chamadoRepository.IniciarAtendimento(id);
+    // WARN: Pera, o que eu to retornando aqui? Acho que confundi com o repository
+    // return await _chamadoRepository.IniciarAtendimento(id);
+    var chamado = await _chamadoRepository.IniciarAtendimento(id);
+    if (chamado is null) return NotFound();
+    return Ok(chamado);
   }
 
   [HttpPost("{id}/encerrar")]
   public IActionResult EncerrarAtendimento([FromRoute] int id) {
     // WARN: Denovo, muito curto...
-    _chamadoRepository.EncerrarChamado(id);
+    var chamado = _chamadoRepository.EncerrarChamado(id);
+    if (chamado is null) return NotFound();
+    return Ok(chamado);
   }
 }
