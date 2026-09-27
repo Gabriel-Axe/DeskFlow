@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DeskFlow.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -13,6 +14,9 @@ public class Categoria
   [Column("nome", TypeName ="varchar(64)")]
   [Required]
   public string Nome { get; set; }
+
+  // WARN: Nao faco ideia se isso eh correto
+  public ICollection<Chamado> Chamados { get; }
 
   public Categoria(int id, string nome)
   {

@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DeskFlow.Controllers;
 
 [ApiController]
-// [Route("[controller]")]
-[Route("ping")]
+[Route("[controller]")]
 public class PingController : ControllerBase
 {
   [HttpGet]

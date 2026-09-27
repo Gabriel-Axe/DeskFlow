@@ -21,6 +21,31 @@ public class AppDbContext : DbContext
              .HasColumnName("nome")
              .HasColumnType("varchar(64)")
              .IsRequired();
+
+            // NOTE: Ainda nao entendo o assunto abaixo...
+            cat
+            .HasMany(ct => ct.Chamados)
+            .WithOne(ch => ch.Categoria)
+            .HasForeignKey(c => c.CategoriaId)
+            .IsRequired();
             });
+
+        modelBuilder.Entity<Chamado>(chm => {
+            chm.ToTable("tb_chamados"); 
+            chm.HasKey(c => c.Id);
+
+            chm.Property(c => c.Titulo)
+             .HasColumnName("titulo")
+             .HasColumnType("varchar(128)")
+             .IsRequired();
+
+            // chm.Property(c => c.) // WARN: Isso eh permitido?
+            //  .HasColumnName("nome")
+            //  .HasColumnType("Titulo(256)")
+            //  .IsRequired();
+
+             // chm.HasMany(c => c.a);
+            });
+
     }
 }
