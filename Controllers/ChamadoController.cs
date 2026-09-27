@@ -11,25 +11,23 @@ public class ChamadoController : ControllerBase
 {
   //WARN: Substitutir isto por um repositorio
   // private List<Chamado> chamados => new();
-  private IChamadoRepository _chamadoRepository;
-  public ChamadoController(IChamadoRepository repository)
+  private IChamadoService _service;
+  public ChamadoController(IChamadoService service)
   {
-    _chamadoRepository = repository;
+    _service = service;
   }
 
-  [HttpGet("id")]
+  [HttpGet("{id}")]
+  // WARN: Avaliar se eh interessante retirar esse oneliner monstruoso
   // public Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
-  public async Task<IActionResult> ObterPorId(int id)
-  {
-    var chamado = await _chamadoRepository.ObterPorId(id);
-    return Ok(chamado);
-  }
+  public async Task<IActionResult> ObterPorId(int id) => Ok(await _service.ObterPorId(id));
 
   [HttpPost]
+  // NOTE: Criar DTOs assim que possivel
   // public Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
   public async Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
   {
-    await _chamadoRepository.RegistrarChamado(chamado);
+    await _service.RegistrarChamado(chamado);
     return Ok();
   }
 
@@ -38,16 +36,18 @@ public class ChamadoController : ControllerBase
     // WARN: Muito curto?
     // WARN: Pera, o que eu to retornando aqui? Acho que confundi com o repository
     // return await _chamadoRepository.IniciarAtendimento(id);
-    var chamado = await _chamadoRepository.IniciarAtendimento(id);
-    if (chamado is null) return NotFound();
-    return Ok(chamado);
+    await _service.IniciarChamadoComId(id);
+    // WARN: Seria interessante retornar 404 se nao existe?
+    // if (chamado is null) return NotFound();
+    return Ok();
   }
 
   [HttpPost("{id}/encerrar")]
-  public IActionResult EncerrarAtendimento([FromRoute] int id) {
+  public async Task<IActionResult> EncerrarAtendimento([FromRoute] int id) {
     // WARN: Denovo, muito curto...
-    var chamado = _chamadoRepository.EncerrarChamado(id);
-    if (chamado is null) return NotFound();
-    return Ok(chamado);
+    await _service.EncerrarChamadoComId(id);
+    // WARN: Seria interessante retornar 404 se nao existe?
+    // if (chamado is null) return NotFound();
+    return Ok();
   }
 }

@@ -30,4 +30,6 @@ public class CategoriaRepository : ICategoriaRepository
     var categoria = await _context.Categorias.FindAsync(id);
     return categoria;
 	}
+
+  public void SalvarMudancas() => _context.SaveChangesAsync();
 }

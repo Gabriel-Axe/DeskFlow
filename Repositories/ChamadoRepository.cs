@@ -13,6 +13,9 @@ public class ChamadoRepository : IChamadoRepository
     _context = context;
   }
 
+  // WARN: Isso atualmente faz 2 coisas, isso eh ok por agora
+  // mas no futuro... eu nao sei, mas eh um behavior nao explicito
+  // (enquanto nao documentar o metodo)
   public async Task RegistrarChamado(Chamado chamado)
 	{
     await _context.AddAsync(chamado);
@@ -29,25 +32,5 @@ public class ChamadoRepository : IChamadoRepository
     return chamado;
   }
 
-  // NOTE: Eh retornado o chamado nullavel para garantir que a operacao
-  // teve sucesso
-  // Era isso ou true e false
-	 public async Task<Chamado?> IniciarAtendimento(int id)
-	{
-    var chamado = await ObterPorId(id);
-    if (chamado is null) return null;
-
-    chamado.Status = ChamadoStatus.EM_ANDAMENTO;
-    await _context.SaveChangesAsync();
-    return chamado;
-	}
-
-	 public async Task<Chamado?> EncerrarChamado(int id)
-	 {
-      var chamado = await ObterPorId(id);
-      if (chamado is null) return null;
-      chamado.Status = ChamadoStatus.FECHADO;
-      _context.SaveChangesAsync();
-      return chamado;
-	 }
+  public async Task SalvarMudancas() => await _context.SaveChangesAsync();
 }

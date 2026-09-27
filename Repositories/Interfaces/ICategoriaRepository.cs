@@ -1,4 +1,4 @@
-public interface ICategoriaRepository
+public interface ICategoriaRepository : IRepository
 {
   public Task RegistrarCategoria(Categoria categoria);
   public Task<List<Categoria>> ListarCategorias();
