@@ -17,6 +17,14 @@ public class ChamadoController : ControllerBase
     _chamadoRepository = repository;
   }
 
+  [HttpGet("id")]
+  // public Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
+  public async Task<IActionResult> ObterPorId(int id)
+  {
+    var chamado = await _chamadoRepository.ObterPorId(id);
+    return Ok(chamado);
+  }
+
   [HttpPost]
   // public Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
   public async Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)

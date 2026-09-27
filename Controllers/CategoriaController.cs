@@ -4,35 +4,41 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DeskFlow.Controllers;
 
+// WARN: Ha prov incosistencias e redundancias neste arquivo e ICategoriaRepository (e no outro repositorio)
+
 [ApiController]
 [Route("api/categorias")]
 // WARN: nao sei se eh assim que determina a rota
 public class CategoriaController : ControllerBase
 {
   //WARN: Substitutir isto por um repositorio
-  private List<Categoria> categorias => new();
+  private ICategoriaRepository _repository;
+  public CategoriaController(ICategoriaRepository repository)
+  {
+    _repository = repository;
+  }
 
   [HttpPost]
   public IActionResult CriarNovaCategoria([FromBody] Categoria categoria)
   {
-    chamados.Add(categoria); // WARN: Talvez lista nao de pra adicionar async,
+    _repository.RegistrarCategoria(categoria); // WARN: Talvez lista nao de pra adicionar async,
                           // ou to fazendo errado
     return Ok();
   }
 
   [HttpPost("{id}/iniciar")]
   public IActionResult ObterDetalhesPorId([FromRoute] int id) {
-    var chamado = chamados.Find(c => c.Id == id);
-    if (chamado == null) return NotFound();
-    chamado.Status = ChamadoStatus.EM_ANDAMENTO;
+    var categoria = _repository.ObterCategoriaPorIdAsync(id);
+    if (categoria == null) return NotFound();
+    // categoria.Status = ChamadoStatus.EM_ANDAMENTO;
     // NOTE: Pesquisar como atualizar no banco
-    return Ok(chamado);
+    return Ok(categoria);
   }
 
-  [HttpPost]
+  [HttpGet]
   // WARN: Possivelmente retorno incorreto
-  public List<Categoria> ListarCategorias()
+  public async Task<List<Categoria>> ListarCategorias()
   {
-    return categorias;
+    return await _repository.ListarCategorias();
   }
 }

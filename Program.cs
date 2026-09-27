@@ -7,6 +7,8 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(connection));
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+builder.Services.AddScoped<IChamadoRepository, ChamadoRepository>();
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
 var app = builder.Build();
 app.MapControllers();
