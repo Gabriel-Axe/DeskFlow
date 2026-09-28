@@ -24,6 +24,7 @@ public class Chamado
   [Required]
   public DateTime DataAbertura { get; set; }
   public DateTime DataFechamento { get; set; }
+  public List<string> Interacoes { get; set; } // NOTE: aka, comentarios de suporte
   public string Solucao { get; set; }
 
   public Categoria Categoria { get; set; } = null;

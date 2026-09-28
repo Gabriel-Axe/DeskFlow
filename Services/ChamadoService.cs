@@ -1,7 +1,9 @@
-using DeskFlow;
-using DeskFlow.Models.Entities;
+namespace DeskFlow.Services;
 
-public class ChamadoService : IChamadoService
+using DeskFlow.Models.Entities;
+using DeskFlow.Repositories.Interfaces;
+
+public class ChamadoService : IChamadoRepository
 {
 
   private IChamadoRepository _repository;
@@ -11,7 +13,12 @@ public class ChamadoService : IChamadoService
     _repository = repository;
   }
 
-
+    public async Task AdicionarInteracao(int id, string comentario)
+    {
+      var chamado = await _repository.ObterPorId(id);
+      if (chamado is null || chamado.Status == ChamadoStatus.FECHADO) return;
+      chamado.Interacoes.Add(comentario);
+    }
 
     public async Task EncerrarChamadoComId(int id)
     {
