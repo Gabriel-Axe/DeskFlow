@@ -20,7 +20,8 @@ public class ChamadoService : IChamadoService
     {
       var chamado = await _repository.ObterPorId(id);
       if (chamado is null || chamado.Status == ChamadoStatus.FECHADO) return;
-      chamado.Interacoes.Add(comentario);
+      var interacao = new Interacao(chamado.Id, comentario);
+      chamado.Interacoes.Add(interacao);
     }
 
     public async Task<Chamado?> AtualizarPorId(int id, ChamadoDto dto)

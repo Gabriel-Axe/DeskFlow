@@ -25,12 +25,11 @@ public class Chamado
   [Required]
   public DateTime DataAbertura { get; set; }
   public DateTime DataFechamento { get; set; }
-  public ICollection<string> Interacoes { get; set; } // NOTE: aka, comentarios de suporte
+  public ICollection<Interacao> Interacoes { get; set; } // NOTE: aka, comentarios de suporte
   public string Solucao { get; set; }
 
-  // public Categoria Categoria { get; set; } = null;
-  [Required]
   public int CategoriaId { get; set; }
+  public Categoria Categoria { get; set; }
 
   public Chamado(ChamadoDto dto)
   {

@@ -18,6 +18,9 @@ public class Categoria
   [Required]
   public string Nome { get; set; }
 
+  public ICollection<Chamado> Chamados { get; set; } // NOTE: Pelo que entendi, 1 categoria tem 
+  // varios chamados
+
   // WARN: Nao faco ideia se isso eh correto, e btw colocar ! eh meio errado
   // public ICollection<Chamado> Chamados { get; set; } = null!;
 

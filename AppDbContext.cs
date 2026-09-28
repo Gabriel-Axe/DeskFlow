@@ -22,12 +22,17 @@ public class AppDbContext : DbContext
              .HasColumnType("varchar(64)")
              .IsRequired();
 
-            // NOTE: Ainda nao entendo o assunto abaixo...
             cat
-            .HasMany(ct => ct.Chamados)
-            .WithOne(ch => ch.Categoria)
-            .HasForeignKey(c => c.CategoriaId)
-            .IsRequired();
+             .HasMany(ca => ca.Chamados)
+             .WithOne(ch => ch.Categoria)
+             .HasForeignKey(ch => ch.CategoriaId);
+
+            // NOTE: Ainda nao entendo o assunto abaixo...
+            // cat
+            // .HasMany(ct => ct.Chamados)
+            // .WithOne(ch => ch.Categoria)
+            // .HasForeignKey(c => c.CategoriaId)
+            // .IsRequired();
             });
 
         modelBuilder.Entity<Chamado>(chm => {
@@ -38,6 +43,15 @@ public class AppDbContext : DbContext
              .HasColumnName("titulo")
              .HasColumnType("varchar(128)")
              .IsRequired();
+
+             chm
+              .HasMany(c => c.Interacoes)
+              .WithOne(i => i.Chamado)
+             .HasForeignKey(i => i.ChamadoId);
+
+             // chm.HasMany()
+             //  .HasColumnName("interacoes")
+            
 
             // chm.Property(c => c.) // WARN: Isso eh permitido?
             //  .HasColumnName("nome")
