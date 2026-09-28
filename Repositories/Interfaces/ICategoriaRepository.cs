@@ -1,3 +1,7 @@
+using DeskFlow.Models.Entities;
+
+namespace DeskFlow.Repositories.Interfaces;
+
 public interface ICategoriaRepository : IRepository
 {
   public Task RegistrarCategoria(Categoria categoria);

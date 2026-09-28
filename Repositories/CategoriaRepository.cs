@@ -1,3 +1,7 @@
+namespace DeskFlow.Repositories;
+
+using DeskFlow.Models.Entities;
+using DeskFlow.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 public class CategoriaRepository : ICategoriaRepository
@@ -31,5 +35,5 @@ public class CategoriaRepository : ICategoriaRepository
     return categoria;
 	}
 
-  public void SalvarMudancas() => _context.SaveChangesAsync();
+  public async Task SalvarMudancas() => await _context.SaveChangesAsync();
 }

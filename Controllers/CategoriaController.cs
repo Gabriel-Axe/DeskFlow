@@ -1,8 +1,11 @@
+namespace DeskFlow.Controllers;
+
+using DeskFlow.Models.DTOs;
 using DeskFlow.Models.Entities;
+using DeskFlow.Repositories.Interfaces;
+using DeskFlow.Services.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-
-namespace DeskFlow.Controllers;
 
 // WARN: Ha prov incosistencias e redundancias neste arquivo e ICategoriaRepository (e no outro repositorio)
 
@@ -11,24 +14,25 @@ namespace DeskFlow.Controllers;
 // WARN: nao sei se eh assim que determina a rota
 public class CategoriaController : ControllerBase
 {
-  //WARN: Substitutir isto por um repositorio
-  private ICategoriaRepository _repository;
-  public CategoriaController(ICategoriaRepository repository)
+  // WARN: Substituir isto por um servico
+  private ICategoriaService _service;
+  public CategoriaController(ICategoriaService service)
   {
-    _repository = repository;
+    _service = service;
   }
 
   [HttpPost]
-  public IActionResult CriarNovaCategoria([FromBody] Categoria categoria)
+  public IActionResult CriarNovaCategoria([FromBody] CategoriaDto dto)
   {
-    _repository.RegistrarCategoria(categoria); // WARN: Talvez lista nao de pra adicionar async,
+    _service.RegistrarCategoria(dto);
+    // _repository.RegistrarCategoria(categoria); // WARN: Talvez lista nao de pra adicionar async,
                           // ou to fazendo errado
     return Ok();
   }
 
   [HttpPost("{id}/iniciar")]
   public IActionResult ObterDetalhesPorId([FromRoute] int id) {
-    var categoria = _repository.ObterCategoriaPorIdAsync(id);
+    var categoria = _service.ObterPorId(id);;
     if (categoria == null) return NotFound();
     // categoria.Status = ChamadoStatus.EM_ANDAMENTO;
     // NOTE: Pesquisar como atualizar no banco
@@ -39,6 +43,13 @@ public class CategoriaController : ControllerBase
   // WARN: Possivelmente retorno incorreto
   public async Task<List<Categoria>> ListarCategorias()
   {
-    return await _repository.ListarCategorias();
+    return await _service.ListarCategorias();
+  }
+
+  [HttpDelete("{id}")]
+  public async Task<IActionResult> DeletarCategora([FromRoute] int id)
+  {
+    await _service.DeletarCategoria(id);
+    return Ok();
   }
 }

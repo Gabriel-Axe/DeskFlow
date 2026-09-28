@@ -1,5 +1,8 @@
+namespace DeskFlow.Models.Entities;
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DeskFlow.Models.DTOs;
 using DeskFlow.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -15,8 +18,13 @@ public class Categoria
   [Required]
   public string Nome { get; set; }
 
-  // WARN: Nao faco ideia se isso eh correto
-  public ICollection<Chamado> Chamados { get; }
+  // WARN: Nao faco ideia se isso eh correto, e btw colocar ! eh meio errado
+  // public ICollection<Chamado> Chamados { get; set; } = null!;
+
+  public Categoria(CategoriaDto dto)
+  {
+    Nome = dto.Nome;
+  }
 
   public Categoria(int id, string nome)
   {
