@@ -1,8 +1,10 @@
+namespace DeskFlow.Controllers;
+
+using DeskFlow.Models.DTOs;
 using DeskFlow.Models.Entities;
+using DeskFlow.Services.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-
-namespace DeskFlow.Controllers;
 
 [ApiController]
 [Route("api/chamados")]
@@ -25,10 +27,24 @@ public class ChamadoController : ControllerBase
   [HttpPost]
   // NOTE: Criar DTOs assim que possivel
   // public Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
-  public async Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
+  public async Task<IActionResult> CriarNovoChamado([FromBody] ChamadoDto dto)
   {
-    await _service.RegistrarChamado(chamado);
+    await _service.RegistrarChamado(dto);
     return Ok();
+  }
+
+  [HttpPut("{id}")]
+  public async Task<Chamado?> AtualizarChamado([FromRoute] int id, [FromBody] ChamadoDto dto)
+  {
+    var novo = await _service.AtualizarPorId(id, dto);
+    // WARN: Ok, eu nao consigo retornar codigos http e ao mesmo tempo um objeto?...
+    return novo;
+  }
+
+  [HttpGet]
+  public async Task<List<Chamado?>> ListarComFiltros([FromQuery] ChamadoFiltroDto dto)
+  {
+    return await _service.ListarComFiltros(dto);
   }
 
   [HttpPost("{id}/iniciar")]

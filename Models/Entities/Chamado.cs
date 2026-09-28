@@ -1,7 +1,8 @@
+namespace DeskFlow.Models.Entities;
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace DeskFlow.Models.Entities;
+using DeskFlow.Models.DTOs;
 
 public class Chamado
 {
@@ -24,30 +25,41 @@ public class Chamado
   [Required]
   public DateTime DataAbertura { get; set; }
   public DateTime DataFechamento { get; set; }
-  public List<string> Interacoes { get; set; } // NOTE: aka, comentarios de suporte
+  public ICollection<string> Interacoes { get; set; } // NOTE: aka, comentarios de suporte
   public string Solucao { get; set; }
 
-  public Categoria Categoria { get; set; } = null;
+  // public Categoria Categoria { get; set; } = null;
   [Required]
   public int CategoriaId { get; set; }
 
-  public Chamado(int id, string titulo)
+  public Chamado(ChamadoDto dto)
   {
-    Id = id;
-    Titulo = titulo;
+    // WARN: Colocar outras coisas a pegar dados, ambos do construtor
+    // de dto e do metodo de atualizar
+    Titulo = dto.Titulo;
+    Descricao = dto.Descricao;
+    SolicitanteNome = SolicitanteNome;
+  }
+
+  public Chamado() {}
+  public void Atualizar(Chamado chamado) 
+  {
+    Titulo = chamado.Titulo;
+    Descricao = chamado.Descricao;
+    SolicitanteNome = chamado.SolicitanteNome;
   }
 }
 
 public enum ChamadoStatus
 {
-  ABERTO,
-  EM_ANDAMENTO,
-  FECHADO
+  ABERTO = 1,
+  EM_ANDAMENTO = 2,
+  FECHADO = 3
 }
 
 public enum ChamadoPrioridade
 {
-  BAIXA,
-  MEDIA,
-  ALTA
+  BAIXA = 1,
+  MEDIA = 2,
+  ALTA = 3
 }

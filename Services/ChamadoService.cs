@@ -1,9 +1,11 @@
 namespace DeskFlow.Services;
 
+using DeskFlow.Models.DTOs;
 using DeskFlow.Models.Entities;
 using DeskFlow.Repositories.Interfaces;
+using DeskFlow.Services.Interfaces;
 
-public class ChamadoService : IChamadoRepository
+public class ChamadoService : IChamadoService
 {
 
   private IChamadoRepository _repository;
@@ -13,11 +15,19 @@ public class ChamadoService : IChamadoRepository
     _repository = repository;
   }
 
+
     public async Task AdicionarInteracao(int id, string comentario)
     {
       var chamado = await _repository.ObterPorId(id);
       if (chamado is null || chamado.Status == ChamadoStatus.FECHADO) return;
       chamado.Interacoes.Add(comentario);
+    }
+
+    public async Task<Chamado?> AtualizarPorId(int id, ChamadoDto dto)
+    {
+      var chamado = new Chamado(dto);
+      await _repository.AtualizarPorId(id, chamado);
+      return chamado;
     }
 
     public async Task EncerrarChamadoComId(int id)
@@ -44,7 +54,26 @@ public class ChamadoService : IChamadoRepository
     // await _context.SaveChangesAsync();
 	}
 
+    public async Task<List<Chamado?>> Listar()
+    {
+      return await _repository.Listar();
+    }
+
+    public async Task<List<Chamado?>> ListarComFiltros(ChamadoFiltroDto dto)
+    {
+      return await _repository.ListarComFiltros(dto);
+    }
+
     public Task<Chamado> ObterPorId(int id) => _repository.ObterPorId(id);
 
-    public async Task<Chamado> RegistrarChamado(Chamado chamado) => await _repository.RegistrarChamado(chamado); 
+    public async Task<Chamado> RegistrarChamado(ChamadoDto dto) 
+    {
+      var chamado = new Chamado(dto);
+      await _repository.RegistrarChamado(chamado);
+      return chamado;
+    }
+
+    public async Task SalvarMudancas() => await _repository.SalvarMudancas();
+
+
 }
