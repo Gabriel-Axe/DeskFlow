@@ -35,6 +35,10 @@ public class AppDbContext : DbContext
             // .IsRequired();
             });
 
+        // NOTE: Pelo visto, muito do que escrevo abaixo
+        // eh redundante, como chm.HasKey(c => c.id) e 
+        // alguns IsRequired (como em definicao de ids)
+
         modelBuilder.Entity<Chamado>(chm => {
             chm.ToTable("tb_chamados"); 
             chm.HasKey(c => c.Id);
@@ -44,10 +48,47 @@ public class AppDbContext : DbContext
              .HasColumnType("varchar(128)")
              .IsRequired();
 
-             chm
+            chm.Property(c => c.Descricao)
+             .HasColumnName("descricao")
+             // .HasColumnType("varchar(1024)")
+             .HasColumnType("varchar")
+             .HasMaxLength(1024) // NOTE: Tmb eh possivel fazer isto
+             .IsRequired();
+
+            chm.Property(c => c.Solucao)
+              .HasColumnName("solucao")
+              .HasColumnType("varchar(1024)") // NOTE: A depender das regras de negocio...
+              .IsRequired(false);
+
+            chm.Property(c => c.SolicitanteNome)
+              .HasColumnName("solicitante_nome")
+              .HasColumnType("varchar(64)") // NOTE: A depender das regras de negocio...
+              .IsRequired();
+
+            // chm.Property(c => c.DataFechamento)
+            //   .HasColumnName("data_abertura")
+            //   // .HasColumnType("datetime") // WARN: Pesquisar dado correto
+            //   .IsRequired(false);
+
+            chm.Property(c => c.DataFechamento)
+              .HasColumnName("data_fechamento")
+              // .HasColumnType("datetime") // WARN: Pesquisar dado correto
+              .IsRequired(false);
+
+            chm.Property(c => c.CategoriaId)
+              .HasColumnName("categoria_id") 
+              .HasColumnType("int") // WARN: Esse mesmo?
+              .IsRequired(true);
+
+            chm.Property(c => c.Prioridade)
+              .HasColumnName("prioridade") 
+              .HasColumnType("int") // WARN: Esse mesmo?
+              .IsRequired(true);
+
+            chm
               .HasMany(c => c.Interacoes)
               .WithOne(i => i.Chamado)
-             .HasForeignKey(i => i.ChamadoId);
+              .HasForeignKey(i => i.ChamadoId);
 
              // chm.HasMany()
              //  .HasColumnName("interacoes")
