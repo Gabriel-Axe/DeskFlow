@@ -1,6 +1,8 @@
 using DeskFlow.Config;
 using DeskFlow.Repositories;
 using DeskFlow.Repositories.Interfaces;
+using DeskFlow.Services;
+using DeskFlow.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +11,12 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(connection));
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+
 builder.Services.AddScoped<IChamadoRepository, ChamadoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+
+builder.Services.AddScoped<IChamadoService, ChamadoService>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 // builder.Services.AddScoped<ErroMiddleware>();
 
 // WARN: Adicionar "servicos" dos IServices da aplicacao
