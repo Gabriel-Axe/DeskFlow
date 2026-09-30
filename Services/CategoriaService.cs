@@ -12,6 +12,14 @@ public class CategoriaService : ICategoriaService
     _repository = repository;
   }
 
+    public async Task<Categoria?> AtualizarCategoria(int id, CategoriaDto dto)
+    {
+      var categoria = await _repository.ObterCategoriaPorIdAsync(id);
+      if (categoria is null) return null;
+      categoria.Atualizar(dto);
+      return categoria;
+    }
+
     public async Task DeletarCategoria(int id)
     {
       // WARN: Nao deveria salvas automaticamente

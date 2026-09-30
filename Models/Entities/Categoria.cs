@@ -34,4 +34,9 @@ public class Categoria
     Id = id;
     Nome = nome;
   }
+
+  public void Atualizar(CategoriaDto dto)
+  {
+    Nome = dto.Nome;
+  }
 }

@@ -28,6 +28,12 @@ public class CategoriaController : ControllerBase
     // _repository.RegistrarCategoria(categoria); // WARN: Talvez lista nao de pra adicionar async,
                           // ou to fazendo errado
     return Ok();
+  [HttpPut("{id}")]
+  public async Task<ActionResult<Categoria>> AtualizarCategoria([FromRoute] int id, [FromBody] CategoriaDto dto)
+  {
+    var categoria = _service.AtualizarCategoria(id, dto);
+    if (categoria is null) return NotFound(); // WARN: Eh possivel que outros erros acontecam nesse metodo
+    return Ok(categoria);
   }
 
   [HttpPost("{id}/iniciar")]
