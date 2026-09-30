@@ -23,6 +23,7 @@ public class ChamadoService : IChamadoService
       if (chamado is null || chamado.Status == ChamadoStatus.FECHADO) return null;
       var interacao = new Interacao(dto);
       chamado.Interacoes.Add(interacao);
+      return interacao;
     }
 
     public async Task<Chamado?> AtualizarPorIdAsync(int id, ChamadoDto dto)

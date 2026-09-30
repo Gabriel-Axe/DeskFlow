@@ -38,6 +38,14 @@ public class ChamadoController : ControllerBase
     return Ok(chamado);
   }
 
+  [HttpPost("{id}/interacoes")]
+  public async Task<ActionResult<Interacao>> AdicionarInteracaoAoChamado([FromRoute] int id, [FromBody] InteracaoDto dto)
+  {
+    var interacao = await _service.AdicionarInteracaoAsync(id, dto);
+    if (interacao is null) return BadRequest(); // WARN: Ha multiplos motivos pelo qual esse metodo pode falhar
+    return Ok(interacao);
+  }
+
   [HttpPut("{id}")]
   public async Task<Chamado?> AtualizarChamado([FromRoute] int id, [FromBody] ChamadoDto dto)
   {
