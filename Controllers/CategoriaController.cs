@@ -22,12 +22,14 @@ public class CategoriaController : ControllerBase
   }
 
   [HttpPost]
-  public IActionResult CriarNovaCategoria([FromBody] CategoriaDto dto)
+  public async Task<ActionResult<Categoria>> CriarNovaCategoria([FromBody] CategoriaDto dto)
   {
-    _service.RegistrarCategoria(dto);
+    var categoria = await _service.RegistrarCategoria(dto);
     // _repository.RegistrarCategoria(categoria); // WARN: Talvez lista nao de pra adicionar async,
                           // ou to fazendo errado
-    return Ok();
+    return Ok(categoria);
+  }
+
   [HttpPut("{id}")]
   public async Task<ActionResult<Categoria>> AtualizarCategoria([FromRoute] int id, [FromBody] CategoriaDto dto)
   {
@@ -36,9 +38,9 @@ public class CategoriaController : ControllerBase
     return Ok(categoria);
   }
 
-  [HttpPost("{id}/iniciar")]
-  public IActionResult ObterDetalhesPorId([FromRoute] int id) {
-    var categoria = _service.ObterPorId(id);;
+  [HttpGet("{id}")]
+  public async Task<IActionResult> ObterPorIdAsync([FromRoute] int id) {
+    var categoria = await _service.ObterPorIdAsync(id);;
     if (categoria == null) return NotFound();
     // categoria.Status = ChamadoStatus.EM_ANDAMENTO;
     // NOTE: Pesquisar como atualizar no banco
@@ -55,7 +57,8 @@ public class CategoriaController : ControllerBase
   [HttpDelete("{id}")]
   public async Task<IActionResult> DeletarCategoria([FromRoute] int id)
   {
+    // WARN: Verificar se a categoria possui chamados antes de deletar
     await _service.DeletarCategoria(id);
-    return Ok();
+    return NoContent();
   }
 }
