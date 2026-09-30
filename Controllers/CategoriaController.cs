@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 // WARN: Ha prov incosistencias e redundancias neste arquivo e ICategoriaRepository (e no outro repositorio)
 
 [ApiController]
-[Route("api/categorias")]
+[Route("api/[controller]")]
 // WARN: nao sei se eh assim que determina a rota
 public class CategoriaController : ControllerBase
 {
@@ -47,7 +47,7 @@ public class CategoriaController : ControllerBase
   }
 
   [HttpDelete("{id}")]
-  public async Task<IActionResult> DeletarCategora([FromRoute] int id)
+  public async Task<IActionResult> DeletarCategoria([FromRoute] int id)
   {
     await _service.DeletarCategoria(id);
     return Ok();

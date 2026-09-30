@@ -24,7 +24,7 @@ public class CategoriaService : ICategoriaService
       return await _repository.ListarCategorias();
     }
 
-    public async Task<Categoria> ObterPorId(int id)
+    public async Task<Categoria> ObterPorIdAsync(int id)
     {
       return await _repository.ObterCategoriaPorIdAsync(id);
     }
@@ -35,10 +35,5 @@ public class CategoriaService : ICategoriaService
       var categoria = new Categoria(dto);
       await _repository.RegistrarCategoria(categoria);
       return categoria;
-    }
-
-    Task<Categoria> ICategoriaService.ObterPorId(int id)
-    {
-        throw new NotImplementedException();
     }
 }

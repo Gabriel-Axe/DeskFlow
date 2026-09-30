@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/chamados")]
+[Route("api/[controller]")]
 // WARN: nao sei se eh assim que determina a rota
 public class ChamadoController : ControllerBase
 {
@@ -22,21 +22,26 @@ public class ChamadoController : ControllerBase
   [HttpGet("{id}")]
   // WARN: Avaliar se eh interessante retirar esse oneliner monstruoso
   // public Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
-  public async Task<IActionResult> ObterPorId(int id) => Ok(await _service.ObterPorId(id));
+  public async Task<ActionResult<Chamado>> ObterDetalhes(int id) 
+  {
+    var detalhes = await _service.ObterDetalhesAsync(id);
+    if (detalhes is null) return NotFound();
+    return Ok(detalhes);
+  }
 
   [HttpPost]
   // NOTE: Criar DTOs assim que possivel
   // public Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
-  public async Task<IActionResult> CriarNovoChamado([FromBody] ChamadoDto dto)
+  public async Task<ActionResult<Chamado>> CriarNovoChamado([FromBody] ChamadoDto dto)
   {
-    await _service.RegistrarChamado(dto);
-    return Ok();
+    var chamado = await _service.RegistrarChamadoAsync(dto);
+    return Ok(chamado);
   }
 
   [HttpPut("{id}")]
   public async Task<Chamado?> AtualizarChamado([FromRoute] int id, [FromBody] ChamadoDto dto)
   {
-    var novo = await _service.AtualizarPorId(id, dto);
+    var novo = await _service.AtualizarPorIdAsync(id, dto);
     // WARN: Ok, eu nao consigo retornar codigos http e ao mesmo tempo um objeto?...
     return novo;
   }
@@ -52,7 +57,7 @@ public class ChamadoController : ControllerBase
     // WARN: Muito curto?
     // WARN: Pera, o que eu to retornando aqui? Acho que confundi com o repository
     // return await _chamadoRepository.IniciarAtendimento(id);
-    await _service.IniciarChamadoComId(id);
+    await _service.IniciarChamadoComIdAsync(id);
     // WARN: Seria interessante retornar 404 se nao existe?
     // if (chamado is null) return NotFound();
     return Ok();
@@ -61,7 +66,7 @@ public class ChamadoController : ControllerBase
   [HttpPost("{id}/encerrar")]
   public async Task<IActionResult> EncerrarAtendimento([FromRoute] int id) {
     // WARN: Denovo, muito curto...
-    await _service.EncerrarChamadoComId(id);
+    await _service.EncerrarChamadoComIdAsync(id);
     // WARN: Seria interessante retornar 404 se nao existe?
     // if (chamado is null) return NotFound();
     return Ok();

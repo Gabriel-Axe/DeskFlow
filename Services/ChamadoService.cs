@@ -16,24 +16,25 @@ public class ChamadoService : IChamadoService
   }
 
 
-    public async Task AdicionarInteracao(int id, string comentario)
+
+    public async Task<Interacao?> AdicionarInteracaoAsync(int chamadoId, InteracaoDto dto)
     {
-      var chamado = await _repository.ObterPorId(id);
-      if (chamado is null || chamado.Status == ChamadoStatus.FECHADO) return;
-      var interacao = new Interacao(chamado.Id, comentario);
+      var chamado = await _repository.ObterPorIdAsync(chamadoId);
+      if (chamado is null || chamado.Status == ChamadoStatus.FECHADO) return null;
+      var interacao = new Interacao(dto);
       chamado.Interacoes.Add(interacao);
     }
 
-    public async Task<Chamado?> AtualizarPorId(int id, ChamadoDto dto)
+    public async Task<Chamado?> AtualizarPorIdAsync(int id, ChamadoDto dto)
     {
       var chamado = new Chamado(dto);
       await _repository.AtualizarPorId(id, chamado);
       return chamado;
     }
 
-    public async Task EncerrarChamadoComId(int id)
+    public async Task EncerrarChamadoComIdAsync(int id)
     {
-      var chamado = await _repository.ObterPorId(id);
+      var chamado = await _repository.ObterPorIdAsync(id);
       if (chamado is null) return;
       chamado.Status = ChamadoStatus.FECHADO;
       // _repository.
@@ -45,9 +46,9 @@ public class ChamadoService : IChamadoService
   // NOTE: Eh retornado o chamado nullavel para garantir que a operacao
   // teve sucesso
   // Era isso ou true e false
-	 public async Task IniciarChamadoComId(int id)
+	 public async Task IniciarChamadoComIdAsync(int id)
 	{
-    var chamado = await _repository.ObterPorId(id);
+    var chamado = await _repository.ObterPorIdAsync(id);
     if (chamado is null) return;
 
     chamado.Status = ChamadoStatus.EM_ANDAMENTO;
@@ -55,12 +56,12 @@ public class ChamadoService : IChamadoService
     // await _context.SaveChangesAsync();
 	}
 
-    public async Task<List<Chamado?>> Listar()
+    public async Task<List<Chamado?>> ListarAsync()
     {
       return await _repository.Listar();
     }
 
-    public async Task<List<Chamado?>> ListarComFiltros(ChamadoFiltroDto dto)
+    public async Task<List<Chamado?>> ListarComFiltrosAsync(ChamadoFiltroDto dto)
     {
       return await _repository.ListarComFiltros(dto);
     }
@@ -75,7 +76,7 @@ public class ChamadoService : IChamadoService
 
     public Task<Chamado> ObterPorIdAsync(int id) => _repository.ObterPorIdAsync(id);
 
-    public async Task<Chamado> RegistrarChamado(ChamadoDto dto) 
+    public async Task<Chamado> RegistrarChamadoAsync(ChamadoDto dto) 
     {
       var chamado = new Chamado(dto);
       await _repository.RegistrarChamado(chamado);
@@ -83,6 +84,4 @@ public class ChamadoService : IChamadoService
     }
 
     public async Task SalvarMudancas() => await _repository.SalvarMudancas();
-
-
 }
