@@ -44,7 +44,7 @@ public class ChamadoController : ControllerBase
   [HttpGet]
   public async Task<List<Chamado?>> ListarComFiltros([FromQuery] ChamadoFiltroDto dto)
   {
-    return await _service.ListarComFiltros(dto);
+    return await _service.ListarComFiltrosAsync(dto);
   }
 
   [HttpPost("{id}/iniciar")]

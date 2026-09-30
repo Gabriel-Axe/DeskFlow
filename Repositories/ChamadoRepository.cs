@@ -33,7 +33,7 @@ public class ChamadoRepository : IChamadoRepository
 	//  public Task<List<Chamado>> ListarChamados()
 	// {
 	// }
-  public async Task<Chamado?> ObterPorId(int id)
+  public async Task<Chamado?> ObterPorIdAsync(int id)
   {
     var chamado = await _context.Chamados.FindAsync(id); // WARN: Nao sei se retorna a entidade
     // com o id especificado
@@ -50,16 +50,18 @@ public class ChamadoRepository : IChamadoRepository
     }
 
 
-    public async Task<List<Chamado?>> ListarComFiltros(ChamadoFiltroDto dto)
+    public async Task<List<Chamado>> ListarComFiltros(ChamadoFiltroDto dto)
     {
-      return await _context.Chamados
-        .Where(c => c.Titulo == dto.Titulo)
-        .Where(c => c.Descricao == dto.Descricao)
-        .Where( c=> dto.SolicitanteNome == c.SolicitanteNome)
-        .Where(c => dto.Status == c.Status)
-        // .Where(c => dto.DataAbertura == c.DataAbertura)
-        // .Where(c => dto.DataFechamento == c.DataFechamento);
-        .ToListAsync();
+      var query = _context.Chamados.AsQueryable();
+      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
+      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
+      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
+      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
+      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
+      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
+      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
+
+      return await query.ToListAsync();
     }
 
     public async Task<Chamado?> AtualizarPorId(int id, Chamado chamado)

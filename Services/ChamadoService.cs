@@ -65,7 +65,15 @@ public class ChamadoService : IChamadoService
       return await _repository.ListarComFiltros(dto);
     }
 
-    public Task<Chamado> ObterPorId(int id) => _repository.ObterPorId(id);
+    public async Task<ChamadoDetalhesDto?> ObterDetalhesAsync(int id)
+    {
+      var chamado = await _repository.ObterPorIdAsync(id);
+      if (chamado is null) return null;
+      var detalhes = chamado.ObterDetalhes();
+      return detalhes;
+    }
+
+    public Task<Chamado> ObterPorIdAsync(int id) => _repository.ObterPorIdAsync(id);
 
     public async Task<Chamado> RegistrarChamado(ChamadoDto dto) 
     {

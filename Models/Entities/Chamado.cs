@@ -2,6 +2,7 @@ namespace DeskFlow.Models.Entities;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using DeskFlow.Models.DTOs;
 
 public class Chamado
@@ -24,7 +25,7 @@ public class Chamado
   public string SolicitanteNome { get; set; }
   [Required]
   public DateTime DataAbertura { get; set; }
-  public DateTime DataFechamento { get; set; }
+  public DateTime? DataFechamento { get; set; }
   public ICollection<Interacao> Interacoes { get; set; } // NOTE: aka, comentarios de suporte
   public string Solucao { get; set; }
 
@@ -37,7 +38,8 @@ public class Chamado
     // de dto e do metodo de atualizar
     Titulo = dto.Titulo;
     Descricao = dto.Descricao;
-    SolicitanteNome = SolicitanteNome;
+    SolicitanteNome = dto.SolicitanteNome;
+    CategoriaId = dto.CategoriaId;
   }
 
   public Chamado() {}
@@ -46,6 +48,31 @@ public class Chamado
     Titulo = chamado.Titulo;
     Descricao = chamado.Descricao;
     SolicitanteNome = chamado.SolicitanteNome;
+  }
+
+  public ChamadoDetalhesDto ObterDetalhes()
+  {
+    return new ChamadoDetalhesDto(Titulo, Descricao, SolicitanteNome, CategoriaId, DataAbertura, PrioridadeParaString(Prioridade), StatusParaString(Status));
+  }
+
+  private string PrioridadeParaString(ChamadoPrioridade prioridade)
+  {
+    return prioridade switch
+    {
+      ChamadoPrioridade.BAIXA => "baixa",
+      ChamadoPrioridade.MEDIA => "media",
+      ChamadoPrioridade.ALTA => "alta",
+    };
+  }
+
+  private string StatusParaString(ChamadoStatus status)
+  {
+    return status switch
+    {
+      ChamadoStatus.ABERTO => "aberto",
+      ChamadoStatus.EM_ANDAMENTO => "em andamento",
+      ChamadoStatus.FECHADO => "fechado",
+    };
   }
 }
 
