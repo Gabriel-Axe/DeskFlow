@@ -4,6 +4,6 @@ public interface IRepository
 {
   // NOTE: Vale a pena?
   // public Task<T> Listar();
-  public Task SalvarMudancas();
+  public Task SalvarMudancasAsync();
 }
 // WARN: Desnecessario?

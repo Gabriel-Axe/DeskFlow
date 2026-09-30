@@ -25,10 +25,7 @@ public class ChamadoRepository : IChamadoRepository
   public async Task RegistrarChamado(Chamado chamado)
 	{
     await _context.AddAsync(chamado);
-    await _context.SaveChangesAsync();
 	}
-
-
 
 	//  public Task<List<Chamado>> ListarChamados()
 	// {
@@ -42,7 +39,7 @@ public class ChamadoRepository : IChamadoRepository
 
 
 
-  public async Task SalvarMudancas() => await _context.SaveChangesAsync();
+  public async Task SalvarMudancasAsync() => await _context.SaveChangesAsync();
 
     public async Task<List<Chamado?>> Listar()
     {
@@ -68,7 +65,6 @@ public class ChamadoRepository : IChamadoRepository
     {
       var old = await _context.Chamados.FindAsync(id);
       old.Atualizar(chamado);
-      SalvarMudancas();
       return old;
     }
 }

@@ -15,7 +15,6 @@ public class CategoriaRepository : ICategoriaRepository
   public async Task RegistrarCategoria(Categoria categoria)
 	{
     await _context.Categorias.AddAsync(categoria);
-    _context.SaveChangesAsync();
 	}
   public async Task<List<Categoria>> ListarCategorias()
 	{
@@ -26,7 +25,6 @@ public class CategoriaRepository : ICategoriaRepository
 	{
     var categoria = await ObterCategoriaPorIdAsync(id);
     _context.Categorias.Remove(categoria);
-    await _context.SaveChangesAsync();
 	}
   public async Task<Categoria> ObterCategoriaPorIdAsync(int id)
 	{
@@ -35,5 +33,5 @@ public class CategoriaRepository : ICategoriaRepository
     return categoria;
 	}
 
-  public async Task SalvarMudancas() => await _context.SaveChangesAsync();
+  public async Task SalvarMudancasAsync() => await _context.SaveChangesAsync();
 }

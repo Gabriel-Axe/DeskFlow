@@ -41,7 +41,7 @@ public class ChamadoService : IChamadoService
       // _repository.
       // return chamado;
       // _repository.ObterPorId();
-      _repository.SalvarMudancas();
+      await _repository.SalvarMudancasAsync();
     }
 
   // NOTE: Eh retornado o chamado nullavel para garantir que a operacao
@@ -53,7 +53,7 @@ public class ChamadoService : IChamadoService
     if (chamado is null) return;
 
     chamado.Status = ChamadoStatus.EM_ANDAMENTO;
-    _repository.SalvarMudancas();
+    await _repository.SalvarMudancasAsync();
     // await _context.SaveChangesAsync();
 	}
 
@@ -84,5 +84,5 @@ public class ChamadoService : IChamadoService
       return chamado;
     }
 
-    public async Task SalvarMudancas() => await _repository.SalvarMudancas();
+    public async Task SalvarMudancas() => await _repository.SalvarMudancasAsync();
 }

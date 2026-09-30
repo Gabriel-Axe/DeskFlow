@@ -24,7 +24,7 @@ public class CategoriaService : ICategoriaService
     {
       // WARN: Nao deveria salvas automaticamente
       await _repository.DeletarCategoria(id);
-      await _repository.SalvarMudancas();
+      await _repository.SalvarMudancasAsync();
     }
 
     public async Task<List<Categoria>> ListarCategorias()
@@ -42,6 +42,7 @@ public class CategoriaService : ICategoriaService
     {
       var categoria = new Categoria(dto);
       await _repository.RegistrarCategoria(categoria);
+      await _repository.SalvarMudancasAsync();
       return categoria;
     }
 }
