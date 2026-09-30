@@ -13,9 +13,19 @@ public class ErroMiddleware
       {
         await _next(context);
       }
+      catch(InvalidOperationException e)
+      {
+        // WARN: Sera que eu deixo esse tipo de erro aparecendo ao cliente?
+        // WARN: Vale a pena tratar todo tipo de excecao?
+        // WARN: Vale aqui notar que ha espaco para colocar uma interface de logging...
+        var erro = new ErroDto($"Operacao invalida: {e.Message}");
+        Console.WriteLine(erro.Erro);
+        context.Response.StatusCode = 500; // WARN: 500 ou 4xx?
+        await context.Response.WriteAsJsonAsync(erro);
+      }
       catch(Exception e)
       {
-        var erro = new ErroDto($"{e.Message}");
+        var erro = new ErroDto($"Um erro aconteceu, contate o suporte ({e.Message})", e.GetType().Name);
         Console.WriteLine(erro.Erro);
         context.Response.StatusCode = 500; // WARN: Meio implicito nao?
         await context.Response.WriteAsJsonAsync(erro); // NOTE: Bora ve se funfa...
@@ -25,7 +35,7 @@ public class ErroMiddleware
 
 // WARN: Temporario, ate encontrar outra possivel melhor forma de
 // fazer isto
-record ErroDto(string Erro){}
+record ErroDto(string Erro, string tipo = null){}
 
 public static class ErroMiddlewareExtensions
 {
