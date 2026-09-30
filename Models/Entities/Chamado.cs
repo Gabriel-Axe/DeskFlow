@@ -26,7 +26,7 @@ public class Chamado
   [Required]
   public DateTime DataAbertura { get; set; }
   public DateTime? DataFechamento { get; set; }
-  public ICollection<Interacao> Interacoes { get; set; } // NOTE: aka, comentarios de suporte
+  public ICollection<Interacao> Interacoes { get; set; } = new List<Interacao>(); // NOTE: aka, comentarios de suporte
   public string Solucao { get; set; }
 
   public int CategoriaId { get; set; }
@@ -38,8 +38,13 @@ public class Chamado
     // de dto e do metodo de atualizar
     Titulo = dto.Titulo;
     Descricao = dto.Descricao;
+    Prioridade = dto.Prioridade;
     SolicitanteNome = dto.SolicitanteNome;
     CategoriaId = dto.CategoriaId;
+
+    DataAbertura = DateTime.Now;
+    Status = ChamadoStatus.ABERTO;
+    // Interacoes = new();
   }
 
   public Chamado() {}
@@ -52,7 +57,16 @@ public class Chamado
 
   public ChamadoDetalhesDto ObterDetalhes()
   {
-    return new ChamadoDetalhesDto(Titulo, Descricao, SolicitanteNome, CategoriaId, DataAbertura, PrioridadeParaString(Prioridade), StatusParaString(Status));
+    return new ChamadoDetalhesDto(
+			Titulo,
+			 Descricao,
+			 SolicitanteNome,
+			 DataAbertura,
+			 PrioridadeParaString(Prioridade),
+			 StatusParaString(Status),
+       CategoriaId,
+       Categoria.ParaDto(),
+       Interacoes.ToList());
   }
 
   private string PrioridadeParaString(ChamadoPrioridade prioridade)

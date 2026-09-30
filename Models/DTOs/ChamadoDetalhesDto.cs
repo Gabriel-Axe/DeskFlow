@@ -6,8 +6,10 @@ public record ChamadoDetalhesDto(
 	  string Titulo,
 	  string Descricao,
 	  string SolicitanteNome,
-    int CategoriaId,
     DateTime DataAbertura,
     string Prioridade,
-    string Status 
+    string Status,
+    int CategoriaId,
+    CategoriaDto Categoria,
+    List<Interacao> Interacoes
     ) {}

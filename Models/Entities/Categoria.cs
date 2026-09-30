@@ -39,4 +39,9 @@ public class Categoria
   {
     Nome = dto.Nome;
   }
+
+  public CategoriaDto ParaDto()
+  {
+    return new CategoriaDto(Nome);
+  }
 }

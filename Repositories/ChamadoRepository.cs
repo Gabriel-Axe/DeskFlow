@@ -47,6 +47,7 @@ public class ChamadoRepository : IChamadoRepository
     }
 
 
+
     public async Task<List<Chamado>> ListarComFiltros(ChamadoFiltroDto dto)
     {
       var query = _context.Chamados.AsQueryable();
@@ -66,5 +67,13 @@ public class ChamadoRepository : IChamadoRepository
       var old = await _context.Chamados.FindAsync(id);
       old.Atualizar(chamado);
       return old;
+    }
+
+    public async Task<Chamado?> ObterDetalhesPorIdAsync(int id)
+    {
+      return await _context.Chamados
+        .Include(c => c.Categoria)
+        .Include(c => c.Interacoes)
+        .FirstOrDefaultAsync(c => c.Id == id);
     }
 }

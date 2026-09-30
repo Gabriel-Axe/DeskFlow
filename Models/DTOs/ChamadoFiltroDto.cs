@@ -1,4 +1,4 @@
 using DeskFlow.Models.Entities;
 
-public record ChamadoFiltroDto(string? Titulo, string? Descricao, ChamadoStatus? Status, string? SolicitanteNome, DateTime? DataAbertura, DateTime? DataFechamento) {}
+public record ChamadoFiltroDto(ChamadoStatus? Status, ChamadoPrioridade? Prioridade, int CategoriaId) {}
 // WARN: Reduzir o nome deste Dto

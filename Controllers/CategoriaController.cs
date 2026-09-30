@@ -58,7 +58,12 @@ public class CategoriaController : ControllerBase
   public async Task<IActionResult> DeletarCategoria([FromRoute] int id)
   {
     // WARN: Verificar se a categoria possui chamados antes de deletar
-    await _service.DeletarCategoria(id);
+    var sucesso = await _service.DeletarCategoria(id);
+    if (!sucesso) return BadRequest(); 
+    // WARN: Seria mais adequado saber que erro foi causado,
+    // e retornar o codigo apropriado, principalmente porque
+    // o erro pode ser ou que a categoria nao existe ou
+    // possui dados chamados associados a ela
     return NoContent();
   }
 }

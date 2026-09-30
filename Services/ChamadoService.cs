@@ -4,6 +4,7 @@ using DeskFlow.Models.DTOs;
 using DeskFlow.Models.Entities;
 using DeskFlow.Repositories.Interfaces;
 using DeskFlow.Services.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 public class ChamadoService : IChamadoService
 {
@@ -21,6 +22,8 @@ public class ChamadoService : IChamadoService
     {
       var chamado = await _repository.ObterPorIdAsync(chamadoId);
       if (chamado is null || chamado.Status == ChamadoStatus.FECHADO) return null;
+      // WARN: Talvez seja necessario tambem verificar se esta em aberto e nao
+      // abrir se for o caso
       var interacao = new Interacao(dto);
       chamado.Interacoes.Add(interacao);
       return interacao;
@@ -36,8 +39,9 @@ public class ChamadoService : IChamadoService
     public async Task EncerrarChamadoComIdAsync(int id)
     {
       var chamado = await _repository.ObterPorIdAsync(id);
-      if (chamado is null) return;
+      if (chamado is null || string.IsNullOrWhiteSpace(chamado.Solucao)) return;
       chamado.Status = ChamadoStatus.FECHADO;
+      chamado.DataFechamento = DateTime.Now;
       // _repository.
       // return chamado;
       // _repository.ObterPorId();
@@ -50,7 +54,7 @@ public class ChamadoService : IChamadoService
 	 public async Task IniciarChamadoComIdAsync(int id)
 	{
     var chamado = await _repository.ObterPorIdAsync(id);
-    if (chamado is null) return;
+    if (chamado is null || chamado.Status != ChamadoStatus.ABERTO) return;
 
     chamado.Status = ChamadoStatus.EM_ANDAMENTO;
     await _repository.SalvarMudancasAsync();
@@ -69,7 +73,7 @@ public class ChamadoService : IChamadoService
 
     public async Task<ChamadoDetalhesDto?> ObterDetalhesAsync(int id)
     {
-      var chamado = await _repository.ObterPorIdAsync(id);
+      var chamado = await _repository.ObterDetalhesPorIdAsync(id);
       if (chamado is null) return null;
       var detalhes = chamado.ObterDetalhes();
       return detalhes;
@@ -79,6 +83,7 @@ public class ChamadoService : IChamadoService
 
     public async Task<Chamado> RegistrarChamadoAsync(ChamadoDto dto) 
     {
+      // NOTE: Tambem seria interessante uma fabrica aqui
       var chamado = new Chamado(dto);
       await _repository.RegistrarChamado(chamado);
       return chamado;

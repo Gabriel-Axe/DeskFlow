@@ -13,6 +13,7 @@ public interface IChamadoRepository : IRepository
   public Task<List<Chamado?>> Listar();
   public Task<List<Chamado>> ListarComFiltros(ChamadoFiltroDto dto);
   public Task<Chamado?> ObterPorIdAsync(int id);
+  public Task<Chamado?> ObterDetalhesPorIdAsync(int id);
   public Task<Chamado?> AtualizarPorId(int id, Chamado chamado);
   // WARN: IActionResult pode, talvez n sei, gerar
   // acoplamento com ASP.NET?
