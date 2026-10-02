@@ -22,8 +22,6 @@ public class ChamadoService : IChamadoService
     {
       var chamado = await _repository.ObterPorIdAsync(chamadoId);
       if (chamado is null || chamado.Status == ChamadoStatus.FECHADO) return null;
-      // WARN: Talvez seja necessario tambem verificar se esta em aberto e nao
-      // abrir se for o caso
       var interacao = new Interacao(dto);
       chamado.Interacoes.Add(interacao);
       return interacao;
@@ -36,29 +34,30 @@ public class ChamadoService : IChamadoService
       return chamado;
     }
 
-    public async Task EncerrarChamadoComIdAsync(int id)
+    public async Task<Chamado?> EncerrarChamadoAsync(int id, EncerrarChamadoDto dto)
     {
       var chamado = await _repository.ObterPorIdAsync(id);
-      if (chamado is null || string.IsNullOrWhiteSpace(chamado.Solucao)) return;
+      if (chamado is null 
+          // || chamado.Status != ChamadoStatus.EM_ANDAMENTO NOTE: Nao ha nada escrito que isso eh possivel ou impossivel
+          || string.IsNullOrWhiteSpace(dto.Solucao)) return null;
+      chamado.Solucao = dto.Solucao;
       chamado.Status = ChamadoStatus.FECHADO;
       chamado.DataFechamento = DateTime.Now;
-      // _repository.
-      // return chamado;
-      // _repository.ObterPorId();
       await _repository.SalvarMudancasAsync();
+      return chamado;
     }
 
   // NOTE: Eh retornado o chamado nullavel para garantir que a operacao
   // teve sucesso
   // Era isso ou true e false
-	 public async Task IniciarChamadoComIdAsync(int id)
+	 public async Task<Chamado?> IniciarChamadoComIdAsync(int id)
 	{
     var chamado = await _repository.ObterPorIdAsync(id);
-    if (chamado is null || chamado.Status != ChamadoStatus.ABERTO) return;
+    if (chamado is null || chamado.Status != ChamadoStatus.ABERTO) return null;
 
     chamado.Status = ChamadoStatus.EM_ANDAMENTO;
     await _repository.SalvarMudancasAsync();
-    // await _context.SaveChangesAsync();
+    return chamado;
 	}
 
     public async Task<List<Chamado?>> ListarAsync()

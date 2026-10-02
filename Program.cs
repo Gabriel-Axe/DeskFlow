@@ -14,17 +14,12 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IChamadoRepository, ChamadoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-
 builder.Services.AddScoped<IChamadoService, ChamadoService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
-// builder.Services.AddScoped<ErroMiddleware>();
-
-// WARN: Adicionar "servicos" dos IServices da aplicacao
 
 var app = builder.Build();
 app.MapControllers();
-app.UseMiddleware<ErroMiddleware>();
-// app.UseErroMiddleware();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // NOTE: Swagger UI eh localizado em localhost:5211/swagger/index.html...
 if (app.Environment.IsDevelopment())
@@ -34,6 +29,5 @@ if (app.Environment.IsDevelopment())
         o.SwaggerEndpoint("/openapi/v1.json", "v1");
     });
 }
-
 
 app.Run();

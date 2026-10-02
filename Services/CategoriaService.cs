@@ -1,3 +1,5 @@
+namespace DeskFlow.Services;
+
 using DeskFlow.Models.DTOs;
 using DeskFlow.Models.Entities;
 using DeskFlow.Repositories.Interfaces;
@@ -20,12 +22,9 @@ public class CategoriaService : ICategoriaService
       return categoria;
     }
 
-    // WARN: Vale a pena retornar verdadeiro ou falso para mostrar
-    // delete com sucesso?
-    public async Task<bool> DeletarCategoria(int id)
+    // NOTE: bool indica sucesso na operacao
+    public async Task<bool> DeletarCategoriaPorIdAsync(int id)
     {
-      // WARN: Nao deveria salvas automaticamente
-      // var categoria = await _repository.ObterCategoriaPorIdAsync(id);
       var chamados = await _repository.ObterChamadosDaCategoriaAsync(id);
       if (chamados.Any()) return false;
       await _repository.DeletarCategoria(id);

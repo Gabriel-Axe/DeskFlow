@@ -15,9 +15,9 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Categoria>(cat => {
-            cat.ToTable("tb_categorias"); // WARN: To configurando o mesmo no modelo
-            cat.HasKey(c => c.Id); // WARN: Pra que isso?
-            cat.Property(c => c.Nome) // WARN: Isso eh permitido?
+            cat.ToTable("tb_categorias");
+            cat.HasKey(c => c.Id);
+            cat.Property(c => c.Nome)
              .HasColumnName("nome")
              .HasColumnType("varchar(64)")
              .IsRequired();
@@ -26,18 +26,10 @@ public class AppDbContext : DbContext
              .HasMany(ca => ca.Chamados)
              .WithOne(ch => ch.Categoria)
              .HasForeignKey(ch => ch.CategoriaId);
-
-            // NOTE: Ainda nao entendo o assunto abaixo...
-            // cat
-            // .HasMany(ct => ct.Chamados)
-            // .WithOne(ch => ch.Categoria)
-            // .HasForeignKey(c => c.CategoriaId)
-            // .IsRequired();
             });
 
-        // NOTE: Pelo visto, muito do que escrevo abaixo
-        // eh redundante, como chm.HasKey(c => c.id) e 
-        // alguns IsRequired (como em definicao de ids)
+        // NOTE: Aparentemente muito abaixo eh redundante,
+        // como chm.HasKey(c => c.id) e alguns IsRequired
 
         modelBuilder.Entity<Chamado>(chm => {
             chm.ToTable("tb_chamados"); 
@@ -50,56 +42,38 @@ public class AppDbContext : DbContext
 
             chm.Property(c => c.Descricao)
              .HasColumnName("descricao")
-             // .HasColumnType("varchar(1024)")
              .HasColumnType("varchar")
-             .HasMaxLength(1024) // NOTE: Tmb eh possivel fazer isto
+             .HasMaxLength(1024) // NOTE: Tmb eh possivel varchar(1024)
              .IsRequired();
 
             chm.Property(c => c.Solucao)
               .HasColumnName("solucao")
-              .HasColumnType("varchar(1024)") // NOTE: A depender das regras de negocio...
+              .HasColumnType("varchar") // NOTE: Tamanho depende das regras de negocio
+              .HasMaxLength(1024)
               .IsRequired(false);
 
             chm.Property(c => c.SolicitanteNome)
               .HasColumnName("solicitante_nome")
-              .HasColumnType("varchar(64)") // NOTE: A depender das regras de negocio...
+              .HasColumnType("varchar")
+              .HasMaxLength(64)
               .IsRequired();
-
-            // chm.Property(c => c.DataFechamento)
-            //   .HasColumnName("data_abertura")
-            //   // .HasColumnType("datetime") // WARN: Pesquisar dado correto
-            //   .IsRequired(false);
 
             chm.Property(c => c.DataFechamento)
               .HasColumnName("data_fechamento")
-              // .HasColumnType("datetime") // WARN: Pesquisar dado correto
               .IsRequired(false);
+            // NOTE: Teoricamente, mapeia para datetime2
 
             chm.Property(c => c.CategoriaId)
-              .HasColumnName("categoria_id") 
-              .HasColumnType("int") // WARN: Esse mesmo?
-              .IsRequired(true);
+              .HasColumnName("categoria_id"); 
+            // NOTE: Teoricamente, mapeia para int requerido automaticamente
 
             chm.Property(c => c.Prioridade)
-              .HasColumnName("prioridade") 
-              .HasColumnType("int") // WARN: Esse mesmo?
-              .IsRequired(true);
+              .HasColumnName("prioridade");
 
             chm
               .HasMany(c => c.Interacoes)
               .WithOne(i => i.Chamado)
               .HasForeignKey(i => i.ChamadoId);
-
-             // chm.HasMany()
-             //  .HasColumnName("interacoes")
-            
-
-            // chm.Property(c => c.) // WARN: Isso eh permitido?
-            //  .HasColumnName("nome")
-            //  .HasColumnType("Titulo(256)")
-            //  .IsRequired();
-
-             // chm.HasMany(c => c.a);
             });
 
     }

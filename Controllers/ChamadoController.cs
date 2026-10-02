@@ -7,12 +7,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/[controller]")]
-// WARN: nao sei se eh assim que determina a rota
+[Route("api/chamados")]
 public class ChamadoController : ControllerBase
 {
-  //WARN: Substitutir isto por um repositorio
-  // private List<Chamado> chamados => new();
   private IChamadoService _service;
   public ChamadoController(IChamadoService service)
   {
@@ -20,8 +17,6 @@ public class ChamadoController : ControllerBase
   }
 
   [HttpGet("{id}")]
-  // WARN: Avaliar se eh interessante retirar esse oneliner monstruoso
-  // public Task<IActionResult> CriarNovoChamado([FromBody] Chamado chamado)
   public async Task<ActionResult<Chamado>> ObterDetalhes(int id) 
   {
     var detalhes = await _service.ObterDetalhesAsync(id);
@@ -35,48 +30,43 @@ public class ChamadoController : ControllerBase
   public async Task<ActionResult<Chamado>> CriarNovoChamado([FromBody] ChamadoDto dto)
   {
     var chamado = await _service.RegistrarChamadoAsync(dto);
-    return Ok(chamado);
+    // return Ok(chamado);
+    return Created();
   }
 
   [HttpPost("{id}/interacoes")]
   public async Task<ActionResult<Interacao>> AdicionarInteracaoAoChamado([FromRoute] int id, [FromBody] InteracaoDto dto)
   {
     var interacao = await _service.AdicionarInteracaoAsync(id, dto);
-    if (interacao is null) return BadRequest(); // WARN: Ha multiplos motivos pelo qual esse metodo pode falhar
+    if (interacao is null) return BadRequest(); // NOTE: Ha multiplos motivos pelo qual esse metodo pode falhar
     return Ok(interacao);
   }
 
   [HttpPut("{id}")]
-  public async Task<Chamado?> AtualizarChamado([FromRoute] int id, [FromBody] ChamadoDto dto)
+  public async Task<ActionResult<Chamado?>> AtualizarChamado([FromRoute] int id, [FromBody] ChamadoDto dto)
   {
     var novo = await _service.AtualizarPorIdAsync(id, dto);
-    // WARN: Ok, eu nao consigo retornar codigos http e ao mesmo tempo um objeto?...
-    return novo;
+    if (novo is null) return NotFound();
+    return Ok(novo);
   }
 
   [HttpGet]
-  public async Task<List<Chamado?>> ListarComFiltros([FromQuery] ChamadoFiltroDto dto)
+  public async Task<ActionResult<List<Chamado>>> ListarComFiltros([FromQuery] ChamadoFiltroDto dto)
   {
-    return await _service.ListarComFiltrosAsync(dto);
+    return Ok(await _service.ListarComFiltrosAsync(dto));
   }
 
   [HttpPost("{id}/iniciar")]
   public async Task<IActionResult> IniciarAtendimento([FromRoute] int id) {
-    // WARN: Muito curto?
-    // WARN: Pera, o que eu to retornando aqui? Acho que confundi com o repository
-    // return await _chamadoRepository.IniciarAtendimento(id);
-    await _service.IniciarChamadoComIdAsync(id);
-    // WARN: Seria interessante retornar 404 se nao existe?
-    // if (chamado is null) return NotFound();
+    var chamado = await _service.IniciarChamadoComIdAsync(id);
+    if (chamado is null) return NotFound();
     return Ok();
   }
 
   [HttpPost("{id}/encerrar")]
-  public async Task<IActionResult> EncerrarAtendimento([FromRoute] int id) {
-    // WARN: Denovo, muito curto...
-    await _service.EncerrarChamadoComIdAsync(id);
-    // WARN: Seria interessante retornar 404 se nao existe?
-    // if (chamado is null) return NotFound();
+  public async Task<IActionResult> EncerrarAtendimento([FromRoute] int id, [FromBody] EncerrarChamadoDto dto) {
+    var chamado = await _service.EncerrarChamadoAsync(id, dto);
+    if (chamado is null) return NotFound();
     return Ok();
   }
 }

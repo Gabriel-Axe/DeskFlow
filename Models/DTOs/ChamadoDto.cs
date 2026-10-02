@@ -7,6 +7,4 @@ public record ChamadoDto(
 	  string Descricao,
 	  string SolicitanteNome,
     ChamadoPrioridade Prioridade,
-    int CategoriaId
-    // public DateTime DataAbertura { get; set; }
-    ) {}
+    int CategoriaId) {}

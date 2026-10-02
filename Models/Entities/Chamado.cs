@@ -5,37 +5,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using DeskFlow.Models.DTOs;
 
+// NOTE: Configurado em AppDbContext
 public class Chamado
 {
-  // WARN: Assumo que eu apenas precise preencher os dadods
-  // em AppDbContext.cs e aqui eh apenas para deixar mais
-  // explicito...
-  [Key]
   public int Id { get; set; }
-
-  [Required]
-  [Column("titulo", TypeName = "varchar(128)")]
   public string Titulo { get; set; }
   public string Descricao { get; set; }
-  [Required]
   public ChamadoPrioridade Prioridade { get; set; }
-  [Required]
   public ChamadoStatus Status { get; set; }
-  [Required]
   public string SolicitanteNome { get; set; }
-  [Required]
   public DateTime DataAbertura { get; set; }
   public DateTime? DataFechamento { get; set; }
-  public ICollection<Interacao> Interacoes { get; set; } = new List<Interacao>(); // NOTE: aka, comentarios de suporte
-  public string Solucao { get; set; }
+  public ICollection<Interacao> Interacoes { get; set; } = new List<Interacao>(); // NOTE: aka comentarios de suporte
+  // WARN: Todo lugar que eu tocar na Solucao deve
+  // reconhecer que eh nulavel agora
+  public string? Solucao { get; set; }
 
   public int CategoriaId { get; set; }
   public Categoria Categoria { get; set; }
 
   public Chamado(ChamadoDto dto)
   {
-    // WARN: Colocar outras coisas a pegar dados, ambos do construtor
-    // de dto e do metodo de atualizar
     Titulo = dto.Titulo;
     Descricao = dto.Descricao;
     Prioridade = dto.Prioridade;
@@ -44,7 +34,6 @@ public class Chamado
 
     DataAbertura = DateTime.Now;
     Status = ChamadoStatus.ABERTO;
-    // Interacoes = new();
   }
 
   public Chamado() {}

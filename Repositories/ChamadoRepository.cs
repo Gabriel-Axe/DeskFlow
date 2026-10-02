@@ -1,6 +1,7 @@
 namespace DeskFlow.Repositories;
 
 using DeskFlow;
+using DeskFlow.Models.DTOs;
 using DeskFlow.Models.Entities;
 using DeskFlow.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -9,31 +10,21 @@ using Microsoft.EntityFrameworkCore;
 
 public class ChamadoRepository : IChamadoRepository
 {
-  // WARN: Repositorios nao servem para realizar operacoes,
-  // apenas procurar dados no banco
   private AppDbContext _context;
   public ChamadoRepository(AppDbContext context)
   {
     _context = context;
   }
 
-
-  // WARN: Isso atualmente faz 2 coisas, isso eh ok por agora
-  // mas no futuro... eu nao sei, mas eh um behavior nao explicito
-  // Alem disso, preciso mesmo retornar o chamado?
-  // (enquanto nao documentar o metodo)
   public async Task RegistrarChamado(Chamado chamado)
 	{
     await _context.AddAsync(chamado);
 	}
 
-	//  public Task<List<Chamado>> ListarChamados()
-	// {
-	// }
   public async Task<Chamado?> ObterPorIdAsync(int id)
   {
-    var chamado = await _context.Chamados.FindAsync(id); // WARN: Nao sei se retorna a entidade
-    // com o id especificado
+    var chamado = await _context.Chamados.FindAsync(id);
+    // WARN: ! Nao sei se retorna a entidade com o id especificado
     return chamado;
   }
 
@@ -46,18 +37,11 @@ public class ChamadoRepository : IChamadoRepository
       return await _context.Chamados.ToListAsync();
     }
 
-
-
     public async Task<List<Chamado>> ListarComFiltros(ChamadoFiltroDto dto)
     {
       var query = _context.Chamados.AsQueryable();
-      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
-      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
-      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
-      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
-      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
-      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
-      if (dto.Titulo != null) query = query.Where(c => c.Titulo == dto.Titulo);
+      if (dto.Status != null) query = query.Where(c => c.Status == dto.Status);
+      if (dto.Prioridade != null) query = query.Where(c => c.Prioridade == dto.Prioridade);
 
       return await query.ToListAsync();
     }

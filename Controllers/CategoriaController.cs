@@ -7,14 +7,10 @@ using DeskFlow.Services.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-// WARN: Ha prov incosistencias e redundancias neste arquivo e ICategoriaRepository (e no outro repositorio)
-
 [ApiController]
-[Route("api/[controller]")]
-// WARN: nao sei se eh assim que determina a rota
+[Route("api/categorias")]
 public class CategoriaController : ControllerBase
 {
-  // WARN: Substituir isto por um servico
   private ICategoriaService _service;
   public CategoriaController(ICategoriaService service)
   {
@@ -25,9 +21,8 @@ public class CategoriaController : ControllerBase
   public async Task<ActionResult<Categoria>> CriarNovaCategoria([FromBody] CategoriaDto dto)
   {
     var categoria = await _service.RegistrarCategoria(dto);
-    // _repository.RegistrarCategoria(categoria); // WARN: Talvez lista nao de pra adicionar async,
-                          // ou to fazendo errado
-    return Ok(categoria);
+    // NOTE: Preferiria retornar Ok(categoria), mas... ta no documento
+    return Created();
   }
 
   [HttpPut("{id}")]
@@ -48,22 +43,21 @@ public class CategoriaController : ControllerBase
   }
 
   [HttpGet]
-  // WARN: Possivelmente retorno incorreto
-  public async Task<List<Categoria>> ListarCategorias()
+  public async Task<ActionResult<List<Categoria>>> ListarCategorias()
   {
-    return await _service.ListarCategorias();
+    var categorias = await _service.ListarCategorias();
+    return Ok(categorias);
   }
 
   [HttpDelete("{id}")]
   public async Task<IActionResult> DeletarCategoria([FromRoute] int id)
   {
-    // WARN: Verificar se a categoria possui chamados antes de deletar
-    var sucesso = await _service.DeletarCategoria(id);
+    var sucesso = await _service.DeletarCategoriaPorIdAsync(id);
     if (!sucesso) return BadRequest(); 
-    // WARN: Seria mais adequado saber que erro foi causado,
-    // e retornar o codigo apropriado, principalmente porque
-    // o erro pode ser ou que a categoria nao existe ou
-    // possui dados chamados associados a ela
+    // NOTE: Atualmente, apenas verifica se um erro aconteceu, e nao
+    // qual erro em especifico, tal porque porque o erro pode ser ou
+    // que a categoria nao existe ou possui dados chamados associados a ela
+     
     return NoContent();
   }
 }

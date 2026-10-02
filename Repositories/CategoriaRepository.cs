@@ -12,6 +12,14 @@ public class CategoriaRepository : ICategoriaRepository
     _context = context;
   }
 
+  public async Task<List<Chamado>> ObterChamadosDaCategoriaAsync(int categoriaId)
+  {
+    // WARN: Isso ta funfando?
+    return await _context.Chamados
+      .Where(ch => ch.CategoriaId == categoriaId)
+      .ToListAsync();
+  }
+
   public async Task RegistrarCategoria(Categoria categoria)
 	{
     await _context.Categorias.AddAsync(categoria);

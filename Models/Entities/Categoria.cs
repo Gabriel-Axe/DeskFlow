@@ -10,19 +10,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 [Table("tb_categorias")]
 public class Categoria
 {
-  [Key]
-  [Column("id")]
   public int Id { get; set; }
-
-  [Column("nome", TypeName ="varchar(64)")]
-  [Required]
   public string Nome { get; set; }
 
-  public ICollection<Chamado> Chamados { get; set; } // NOTE: Pelo que entendi, 1 categoria tem 
-  // varios chamados
-
-  // WARN: Nao faco ideia se isso eh correto, e btw colocar ! eh meio errado
-  // public ICollection<Chamado> Chamados { get; set; } = null!;
+  public ICollection<Chamado> Chamados { get; set; } // NOTE: Pelo que entendi, 1 categoria tem varios chamados
 
   public Categoria(CategoriaDto dto)
   {
