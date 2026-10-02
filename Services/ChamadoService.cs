@@ -4,7 +4,6 @@ using DeskFlow.Models.DTOs;
 using DeskFlow.Models.Entities;
 using DeskFlow.Repositories.Interfaces;
 using DeskFlow.Services.Interfaces;
-using Microsoft.IdentityModel.Tokens;
 
 public class ChamadoService : IChamadoService
 {
@@ -60,12 +59,12 @@ public class ChamadoService : IChamadoService
     return chamado;
 	}
 
-    public async Task<List<Chamado?>> ListarAsync()
+    public async Task<List<Chamado>> ListarAsync()
     {
       return await _repository.Listar();
     }
 
-    public async Task<List<Chamado?>> ListarComFiltrosAsync(ChamadoFiltroDto dto)
+    public async Task<List<Chamado>> ListarComFiltrosAsync(ChamadoFiltroDto dto)
     {
       return await _repository.ListarComFiltros(dto);
     }
@@ -78,7 +77,7 @@ public class ChamadoService : IChamadoService
       return detalhes;
     }
 
-    public Task<Chamado> ObterPorIdAsync(int id) => _repository.ObterPorIdAsync(id);
+    public Task<Chamado?> ObterPorIdAsync(int id) => _repository.ObterPorIdAsync(id);
 
     public async Task<Chamado> RegistrarChamadoAsync(ChamadoDto dto) 
     {

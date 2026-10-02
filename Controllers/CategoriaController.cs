@@ -2,9 +2,7 @@ namespace DeskFlow.Controllers;
 
 using DeskFlow.Models.DTOs;
 using DeskFlow.Models.Entities;
-using DeskFlow.Repositories.Interfaces;
 using DeskFlow.Services.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]

@@ -22,7 +22,7 @@ public class Chamado
   public string? Solucao { get; set; }
 
   public int CategoriaId { get; set; }
-  public Categoria Categoria { get; set; }
+  public Categoria Categoria { get; set; } = null!; // NOTE: Necessario apenas pra remover avisos
 
   public Chamado(ChamadoDto dto)
   {
@@ -36,6 +36,12 @@ public class Chamado
     Status = ChamadoStatus.ABERTO;
   }
 
+  // NOTE: Isto eh necessario para remover avisos do compilador desta linha ate o fim do arquivo, necessario pois o que eh avisado
+  // ou faz parte do EF Core ou nao eh estabelecido nas regras de negocio
+  // Para delimitar ate onde os avisos sao ignorados use
+  // #pragma warning restore 8618, 8524
+
+  #pragma warning disable 8618, 8524 
   public Chamado() {}
   public void Atualizar(Chamado chamado) 
   {
@@ -51,14 +57,14 @@ public class Chamado
 			 Descricao,
 			 SolicitanteNome,
 			 DataAbertura,
-			 PrioridadeParaString(Prioridade),
-			 StatusParaString(Status),
+             PrioridadeParaString(Prioridade),
+             StatusParaString(Status),
        CategoriaId,
        Categoria.ParaDto(),
        Interacoes.ToList());
   }
 
-  private string PrioridadeParaString(ChamadoPrioridade prioridade)
+  private static string PrioridadeParaString(ChamadoPrioridade prioridade)
   {
     return prioridade switch
     {
@@ -68,7 +74,7 @@ public class Chamado
     };
   }
 
-  private string StatusParaString(ChamadoStatus status)
+  private static string StatusParaString(ChamadoStatus status)
   {
     return status switch
     {
@@ -77,6 +83,7 @@ public class Chamado
       ChamadoStatus.FECHADO => "fechado",
     };
   }
+  #pragma warning restore 8618, 8524
 }
 
 public enum ChamadoStatus

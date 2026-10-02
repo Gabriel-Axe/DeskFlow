@@ -13,7 +13,7 @@ public class Categoria
   public int Id { get; set; }
   public string Nome { get; set; }
 
-  public ICollection<Chamado> Chamados { get; set; } // NOTE: Pelo que entendi, 1 categoria tem varios chamados
+  public ICollection<Chamado> Chamados { get; set; } = new List<Chamado>();// NOTE: Pelo que entendi, 1 categoria tem varios chamados
 
   public Categoria(CategoriaDto dto)
   {

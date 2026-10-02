@@ -7,7 +7,7 @@ public interface IChamadoRepository : IRepository
 {
   // public Task<Chamado> RegistrarChamado(Chamado chamado);
   public Task RegistrarChamado(Chamado chamado);
-  public Task<List<Chamado?>> Listar();
+  public Task<List<Chamado>> Listar();
   public Task<List<Chamado>> ListarComFiltros(ChamadoFiltroDto dto);
   public Task<Chamado?> ObterPorIdAsync(int id);
   public Task<Chamado?> ObterDetalhesPorIdAsync(int id);

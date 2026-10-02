@@ -30,4 +30,4 @@ public class ExceptionHandlingMiddleware
 }
 
 // NOTE: Nada mais permanente que uma solucao temporaria
-record ErroDto(string Erro, string Tipo = null){}
+record ErroDto(string Erro, string? Tipo = null){}

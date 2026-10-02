@@ -32,9 +32,10 @@ public class CategoriaRepository : ICategoriaRepository
   public async Task DeletarCategoria(int id)
 	{
     var categoria = await ObterCategoriaPorIdAsync(id);
+    if (categoria is null) return;
     _context.Categorias.Remove(categoria);
 	}
-  public async Task<Categoria> ObterCategoriaPorIdAsync(int id)
+  public async Task<Categoria?> ObterCategoriaPorIdAsync(int id)
 	{
     // WARN: Nao sei se isto funciona
     var categoria = await _context.Categorias.FindAsync(id);

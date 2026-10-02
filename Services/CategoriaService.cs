@@ -26,7 +26,7 @@ public class CategoriaService : ICategoriaService
     public async Task<bool> DeletarCategoriaPorIdAsync(int id)
     {
       var chamados = await _repository.ObterChamadosDaCategoriaAsync(id);
-      if (chamados.Any()) return false;
+      if (chamados.Count != 0) return false;
       await _repository.DeletarCategoria(id);
       await _repository.SalvarMudancasAsync();
       return true;
@@ -37,13 +37,13 @@ public class CategoriaService : ICategoriaService
       return await _repository.ListarCategorias();
     }
 
-    public async Task<Categoria> ObterPorIdAsync(int id)
+    public async Task<Categoria?> ObterPorIdAsync(int id)
     {
       return await _repository.ObterCategoriaPorIdAsync(id);
     }
 
 
-    public async Task<Categoria> RegistrarCategoria(CategoriaDto dto)
+    public async Task<Categoria?> RegistrarCategoria(CategoriaDto dto)
     {
       var categoria = new Categoria(dto);
       await _repository.RegistrarCategoria(categoria);

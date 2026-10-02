@@ -13,6 +13,7 @@ public class Interacao
     public int ChamadoId { get; set; }
     public Chamado Chamado { get; set; }
 
+    #pragma warning disable 8618, 8524 
     public Interacao() {}
     public Interacao(InteracaoDto dto)
     {
@@ -25,4 +26,5 @@ public class Interacao
       Autor = autor;
       Mensagem = mensagem;
     }
+    #pragma warning restore 8618, 8524
 }

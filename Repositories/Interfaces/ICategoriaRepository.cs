@@ -8,5 +8,5 @@ public interface ICategoriaRepository : IRepository
   public Task<List<Categoria>> ListarCategorias();
   public Task<List<Chamado>> ObterChamadosDaCategoriaAsync(int categoriaId);
   public Task DeletarCategoria(int id);
-  public Task<Categoria> ObterCategoriaPorIdAsync(int id);
+  public Task<Categoria?> ObterCategoriaPorIdAsync(int id);
 }
