@@ -20,12 +20,16 @@ public class ChamadoRepository : IChamadoRepository
 
   public async Task<Chamado?> ObterPorIdAsync(int id)
   {
-    var chamado = await _context.Chamados.FindAsync(id);
-    // WARN: ! Nao sei se retorna a entidade com o id especificado
-    return chamado;
+      return await _context.Chamados
+        .Include(c => c.Categoria)
+        .Include(c => c.Interacoes)
+        .FirstOrDefaultAsync(c => c.Id == id);
+      // WARN: Isso pode trazer um certo... overhead, ao EF Core/Banco
+      // Include faz uma subconsulta para incluir categorias
+      // Fiz isso porque nao ha como prever, ate o momento
+      // que metodo pode precisar de chamado junto de
+      // sua categoria
   }
-
-
 
   public async Task SalvarMudancasAsync() => await _context.SaveChangesAsync();
 
@@ -36,9 +40,13 @@ public class ChamadoRepository : IChamadoRepository
 
     public async Task<List<Chamado>> ListarComFiltros(ChamadoFiltroDto dto)
     {
+      Console.WriteLine($"status: {dto.Status}");
+      Console.WriteLine($"prioridade: {dto.Prioridade}");
+      Console.WriteLine($"categoriaId: {dto.CategoriaId}");
       var query = _context.Chamados.AsQueryable();
-      if (dto.Status != null) query = query.Where(c => c.Status == dto.Status);
-      if (dto.Prioridade != null) query = query.Where(c => c.Prioridade == dto.Prioridade);
+      if (!dto.Status.Equals(null)) query = query.Where(c => c.Status == dto.Status);
+      if (!dto.Prioridade.Equals(null)) query = query.Where(c => c.Prioridade == dto.Prioridade);
+      if (!dto.CategoriaId.Equals(null)) query = query.Where(c => c.CategoriaId == dto.CategoriaId);
 
       return await query.ToListAsync();
     }
@@ -51,11 +59,17 @@ public class ChamadoRepository : IChamadoRepository
       return old;
     }
 
-    public async Task<Chamado?> ObterDetalhesPorIdAsync(int id)
+
+
+    public async Task<bool> ValidarChamado(ChamadoDto dto)
     {
-      return await _context.Chamados
-        .Include(c => c.Categoria)
-        .Include(c => c.Interacoes)
-        .FirstOrDefaultAsync(c => c.Id == id);
+      // WARN: Por enquanto, so valida que a categoria de id existe
+      if (!await _context.Categorias.AnyAsync(cat => cat.Id == dto.CategoriaId)) return false;
+      return true;
+    }
+
+    public async Task<ChamadoListaDto?> ObterShallowPorIdAsync(int id)
+    {
+      return await _context.Chamados.FirstOrDefaultAsync(c => c.Id == id);
     }
 }

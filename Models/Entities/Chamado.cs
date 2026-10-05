@@ -48,20 +48,32 @@ public class Chamado
     Titulo = chamado.Titulo;
     Descricao = chamado.Descricao;
     SolicitanteNome = chamado.SolicitanteNome;
+    Prioridade = chamado.Prioridade;
+  }
+
+  public ChamadoDto ParaDto()
+  {
+    return new ChamadoDto(Titulo, Descricao, SolicitanteNome, Prioridade, CategoriaId);
+  }
+
+  public ChamadoListaDto ParaListaDto()
+  {
+    return new ChamadoListaDto(Id, Titulo, Descricao, SolicitanteNome, Prioridade, Status, CategoriaId);
   }
 
   public ChamadoDetalhesDto ObterDetalhes()
   {
     return new ChamadoDetalhesDto(
-			Titulo,
-			 Descricao,
-			 SolicitanteNome,
-			 DataAbertura,
-             PrioridadeParaString(Prioridade),
-             StatusParaString(Status),
-       CategoriaId,
-       Categoria.ParaDto(),
-       Interacoes.ToList());
+        Titulo,
+        Descricao,
+        SolicitanteNome,
+        DataAbertura,
+        PrioridadeParaString(Prioridade),
+        StatusParaString(Status),
+        CategoriaId,
+        Categoria.ParaListagemDto(),
+        Interacoes.Select(i => i.ParaDto()).ToList()
+        );
   }
 
   private static string PrioridadeParaString(ChamadoPrioridade prioridade)
@@ -95,7 +107,7 @@ public enum ChamadoStatus
 
 public enum ChamadoPrioridade
 {
-  BAIXA = 1,
-  MEDIA = 2,
-  ALTA = 3
+  BAIXA = 0,
+  MEDIA = 1,
+  ALTA = 2
 }

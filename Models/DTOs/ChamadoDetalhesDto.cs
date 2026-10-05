@@ -10,6 +10,6 @@ public record ChamadoDetalhesDto(
     string Prioridade,
     string Status,
     int CategoriaId,
-    CategoriaDto Categoria,
-    List<Interacao> Interacoes
+    CategoriaListaDto Categoria,
+    List<InteracaoDto> Interacoes
     ) {}

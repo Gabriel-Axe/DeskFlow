@@ -19,10 +19,17 @@ public class ChamadoService : IChamadoService
 
     public async Task<Interacao?> AdicionarInteracaoAsync(int chamadoId, InteracaoDto dto)
     {
-      var chamado = await _repository.ObterPorIdAsync(chamadoId);
-      if (chamado is null || chamado.Status == ChamadoStatus.FECHADO) return null;
+      var chamado = await _repository.ObterShallowPorIdAsync(chamadoId);
+      if (chamado is null) return null;
+      // WARN: Decidi que o chamado eh apenas fechado por
+      // conta de nao existir um chamado com esse id
+      // Ser compreensivo e explicar exatamente o que deu
+      // poderia ser bastante trabalhoso
+      Console.WriteLine($"mensagem: {dto.Mensagem}");
       var interacao = new Interacao(dto);
+      Console.WriteLine($"mensagem: {interacao.Mensagem}");
       chamado.Interacoes.Add(interacao);
+      await _repository.SalvarMudancasAsync();
       return interacao;
     }
 
@@ -30,6 +37,7 @@ public class ChamadoService : IChamadoService
     {
       var chamado = new Chamado(dto);
       await _repository.AtualizarPorId(id, chamado);
+      await _repository.SalvarMudancasAsync();
       return chamado;
     }
 
@@ -52,6 +60,7 @@ public class ChamadoService : IChamadoService
 	 public async Task<Chamado?> IniciarChamadoComIdAsync(int id)
 	{
     var chamado = await _repository.ObterPorIdAsync(id);
+    // Console.WriteLine($"status: {chamado.Status.ToString()}");
     if (chamado is null || chamado.Status != ChamadoStatus.ABERTO) return null;
 
     chamado.Status = ChamadoStatus.EM_ANDAMENTO;
@@ -71,7 +80,7 @@ public class ChamadoService : IChamadoService
 
     public async Task<ChamadoDetalhesDto?> ObterDetalhesAsync(int id)
     {
-      var chamado = await _repository.ObterDetalhesPorIdAsync(id);
+      var chamado = await _repository.ObterPorIdAsync(id);
       if (chamado is null) return null;
       var detalhes = chamado.ObterDetalhes();
       return detalhes;
@@ -79,11 +88,14 @@ public class ChamadoService : IChamadoService
 
     public Task<Chamado?> ObterPorIdAsync(int id) => _repository.ObterPorIdAsync(id);
 
-    public async Task<Chamado> RegistrarChamadoAsync(ChamadoDto dto) 
+    public async Task<Chamado?> RegistrarChamadoAsync(ChamadoDto dto) 
     {
       // NOTE: Tambem seria interessante uma fabrica aqui
+      var valido = await _repository.ValidarChamado(dto);
+      if (!valido) return null;
       var chamado = new Chamado(dto);
       await _repository.RegistrarChamado(chamado);
+      await _repository.SalvarMudancasAsync();
       return chamado;
     }
 
