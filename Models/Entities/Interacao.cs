@@ -18,7 +18,8 @@ public class Interacao
     public Interacao(InteracaoDto dto)
     {
       Autor = dto.Autor;
-      DataRegistro = dto.DataRegistro.Equals(null) ? DateTime.Now : (DateTime) dto.DataRegistro;
+      Mensagem = dto.Mensagem;
+      DataRegistro = DateTime.Now;
     }
     public Interacao(int chamadoId, string autor, string mensagem)
     {
@@ -27,4 +28,9 @@ public class Interacao
       Mensagem = mensagem;
     }
     #pragma warning restore 8618, 8524
+
+    public InteracaoDto ParaDto()
+    {
+      return new InteracaoDto(Autor, Mensagem);
+    }
 }

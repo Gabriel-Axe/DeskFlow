@@ -31,6 +31,32 @@ public class AppDbContext : DbContext
         // NOTE: Aparentemente muito abaixo eh redundante,
         // como chm.HasKey(c => c.id) e alguns IsRequired
 
+        modelBuilder.Entity<Interacao>(itr => {
+            itr.ToTable("tb_interacoes");
+            itr.HasKey(i => i.Id);
+
+            itr.Property(i => i.Autor)
+             .HasColumnName("autor")
+             .HasColumnType("varchar")
+             .HasMaxLength(128)
+             .IsRequired();
+
+            itr.Property(i => i.DataRegistro)
+             .HasColumnName("data_registro")
+             .IsRequired();
+
+            itr.Property(i => i.Mensagem)
+             .HasColumnName("mensagem")
+             .HasColumnType("varchar")
+             .HasMaxLength(128)
+             .IsRequired();
+
+             itr.HasOne(i => i.Chamado)
+               .WithMany(c => c.Interacoes)
+               .HasForeignKey(i => i.ChamadoId);
+
+            });
+
         modelBuilder.Entity<Chamado>(chm => {
             chm.ToTable("tb_chamados"); 
             chm.HasKey(c => c.Id);
