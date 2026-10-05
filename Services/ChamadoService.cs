@@ -17,7 +17,7 @@ public class ChamadoService : IChamadoService
 
 
 
-    public async Task<Interacao?> AdicionarInteracaoAsync(int chamadoId, InteracaoDto dto)
+    public async Task<InteracaoListaDto?> AdicionarInteracaoAsync(int chamadoId, InteracaoDto dto)
     {
       var chamado = await _repository.ObterShallowPorIdAsync(chamadoId);
       if (chamado is null) return null;
@@ -25,12 +25,14 @@ public class ChamadoService : IChamadoService
       // conta de nao existir um chamado com esse id
       // Ser compreensivo e explicar exatamente o que deu
       // poderia ser bastante trabalhoso
-      Console.WriteLine($"mensagem: {dto.Mensagem}");
+      // Console.WriteLine($"mensagem: {dto.Mensagem}");
       var interacao = new Interacao(dto);
-      Console.WriteLine($"mensagem: {interacao.Mensagem}");
-      chamado.Interacoes.Add(interacao);
-      await _repository.SalvarMudancasAsync();
-      return interacao;
+      // // Console.WriteLine($"mensagem: {interacao.Mensagem}");
+      // await _repository.AdicionarInteracao(interacao);
+      // return interacao;
+      // var chamado = await _repository.ObterPorIdAsync(chamadoId);
+      await _repository.AdicionarInteracao(interacao);
+      return interacao.ParaListaDto();
     }
 
     public async Task<Chamado?> AtualizarPorIdAsync(int id, ChamadoDto dto)

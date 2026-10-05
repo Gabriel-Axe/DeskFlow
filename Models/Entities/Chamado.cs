@@ -72,7 +72,7 @@ public class Chamado
         StatusParaString(Status),
         CategoriaId,
         Categoria.ParaListagemDto(),
-        Interacoes.Select(i => i.ParaDto()).ToList()
+        Interacoes.Select(i => i.ParaListaDto()).ToList()
         );
   }
 

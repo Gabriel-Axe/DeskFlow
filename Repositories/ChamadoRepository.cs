@@ -33,6 +33,16 @@ public class ChamadoRepository : IChamadoRepository
 
   public async Task SalvarMudancasAsync() => await _context.SaveChangesAsync();
 
+  public async Task AdicionarInteracao(Interacao interacao) 
+  {
+    // if (interacao is null) return;
+    // var chamado = await ObterPorIdAsync(interacao.ChamadoId);
+    // interacao.Chamado = chamado;
+    // chamado.Interacoes.Add(interacao);
+    await _context.Interacoes.AddAsync(interacao);
+    await _context.SaveChangesAsync();
+  }
+
     public async Task<List<Chamado>> Listar()
     {
       return await _context.Chamados.ToListAsync();
@@ -68,7 +78,8 @@ public class ChamadoRepository : IChamadoRepository
       return true;
     }
 
-    public async Task<ChamadoListaDto?> ObterShallowPorIdAsync(int id)
+    // NOTE: Obtem um chamado sem obter Interacoes e Categoria
+    public async Task<Chamado?> ObterShallowPorIdAsync(int id)
     {
       return await _context.Chamados.FirstOrDefaultAsync(c => c.Id == id);
     }

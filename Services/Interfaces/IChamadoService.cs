@@ -11,7 +11,7 @@ public interface IChamadoService
   public Task<ChamadoDetalhesDto?> ObterDetalhesAsync(int id);
   public Task<Chamado> RegistrarChamadoAsync(ChamadoDto dto);
   public Task<Chamado?> IniciarChamadoComIdAsync(int id);
-  public Task<Interacao?> AdicionarInteracaoAsync(int chamadoId, InteracaoDto dto);
+  public Task<InteracaoListaDto?> AdicionarInteracaoAsync(int chamadoId, InteracaoDto dto);
   public Task<Chamado?> EncerrarChamadoAsync(int id, EncerrarChamadoDto dto);
   public Task<List<Chamado>> ListarAsync();
   public Task<List<Chamado>> ListarComFiltrosAsync(ChamadoFiltroDto dto);

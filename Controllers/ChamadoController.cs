@@ -38,9 +38,9 @@ public class ChamadoController : ControllerBase
   [HttpPost("{id}/interacoes")]
   public async Task<ActionResult<Interacao>> AdicionarInteracaoAoChamado([FromRoute] int id, [FromBody] InteracaoDto dto)
   {
-    var interacao = await _service.AdicionarInteracaoAsync(id, dto);
-    if (interacao is null) return BadRequest(new ErroDto($"O chamado com o id {id} nao existe")); // NOTE: Ha multiplos motivos pelo qual esse metodo pode falhar
-    return Ok(interacao);
+    var interacao_lista = await _service.AdicionarInteracaoAsync(id, dto);
+    if (interacao_lista is null) return BadRequest(new ErroDto($"O chamado com o id {id} nao existe")); // NOTE: Ha multiplos motivos pelo qual esse metodo pode falhar
+    return Ok(interacao_lista);
   }
 
   [HttpPut("{id}")]

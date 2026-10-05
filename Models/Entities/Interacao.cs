@@ -33,4 +33,9 @@ public class Interacao
     {
       return new InteracaoDto(Autor, Mensagem);
     }
+
+    public InteracaoListaDto ParaListaDto()
+    {
+      return new InteracaoListaDto(Id, Autor, Mensagem);
+    }
 }
