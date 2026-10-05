@@ -24,6 +24,7 @@ public class CategoriaRepository : ICategoriaRepository
 	{
     await _context.Categorias.AddAsync(categoria);
 	}
+
   public async Task<List<Categoria>> ListarCategorias()
 	{
     var lista = _context.Categorias.ToListAsync();

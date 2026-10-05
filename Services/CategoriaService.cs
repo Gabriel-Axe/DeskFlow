@@ -14,11 +14,12 @@ public class CategoriaService : ICategoriaService
     _repository = repository;
   }
 
-    public async Task<Categoria?> AtualizarCategoria(int id, CategoriaDto dto)
+    public async Task<Categoria?> AtualizarCategoriaAsync(int id, CategoriaDto dto)
     {
       var categoria = await _repository.ObterCategoriaPorIdAsync(id);
       if (categoria is null) return null;
       categoria.Atualizar(dto);
+      await _repository.SalvarMudancasAsync();
       return categoria;
     }
 

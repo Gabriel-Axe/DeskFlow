@@ -35,4 +35,14 @@ public class Categoria
   {
     return new CategoriaDto(Nome);
   }
+
+  public CategoriaListaDto ParaListagemDto()
+  {
+    return new CategoriaListaDto(Id, Nome);
+  }
+
+  public CategoriaDetalhesDto ParaDetalhesDto()
+  {
+    return new CategoriaDetalhesDto(Id, Nome, Chamados.Select(c => c.ParaListaDto()).ToList());
+  }
 }
