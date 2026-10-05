@@ -16,13 +16,13 @@ Este é um sistema web para criação e gerenciamento de chamados de suporte via
 
 O sistema possui rastreamento de chamados via prioridade, listagem por filtros, categorias de chamados e histórico de interações.
 
-[Link para o vídeo de apresentação](link do video)
+[Link para o vídeo de apresentação](https://youtu.be/KGS-IcDucyU)
 
 ## Mapa do Projeto
 
 [ToC](#toc)
 
-```language
+```md
 .
 │
 ├── README.md
