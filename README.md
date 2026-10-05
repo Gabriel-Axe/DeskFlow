@@ -1,18 +1,24 @@
 # DeskFlow - Sistema de Gestão  de Chamados e Helpdesk
 
-[[README#Sobre]]
-[[README#Mapa do Projeto]]
-[[README#Utilização]]
-[[README#Modelos e Ciclo de Vida]]
-[[README#Tecnologias Usadas e Dependencias]]
+## ToC
+
+- [Sobre](#sobre)
+- [Mapa do Projeto](#mapa-do-projeto)
+- [Utilização](#utilização)
+- [Modelos e Ciclo de Vida](#modelos-e-ciclo-de-vida)
+- [Tecnologias Usadas e Dependencias](#tecnologias-usadas-e-dependencias)
 
 ## Sobre
+
+[ToC](#toc)
 
 Este é um sistema web para criação e gerenciamento de chamados de suporte via tickets.
 
 O sistema possui rastreamento de chamados via prioridade, listagem por filtros, categorias de chamados e histórico de interações.
 
 ## Mapa do Projeto
+
+[ToC](#toc)
 
 ```language
 .
@@ -72,6 +78,8 @@ O sistema possui rastreamento de chamados via prioridade, listagem por filtros, 
 
 ## Utilização
 
+[ToC](#toc)
+
 Primeiramente clone o projeto:
 
 ```bash
@@ -108,6 +116,8 @@ Para realizar requisições HTTP, você vai precisar de um cliente HTTP, como os
 
 ## Modelos e Ciclo de Vida
 
+[ToC](#toc)
+
 Existem 3 modelos no projeto:
 
 - Chamado: o ticket de suporte
@@ -123,6 +133,8 @@ Por fim, há 3 "tipos" principais de DTO:
 - Lista: mostram a informação mais minimamente densa quanto possivel da entidade, utilizada principalmente para evitar problemas de referência circular
 
 ## Tecnologias Usadas e Dependencias
+
+[ToC](#toc)
 
 - .NET 10
 - ASP.NET 10
