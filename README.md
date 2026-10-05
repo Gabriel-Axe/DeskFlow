@@ -6,7 +6,7 @@
 - [Mapa do Projeto](#mapa-do-projeto)
 - [Utilização](#utilização)
 - [Modelos e Ciclo de Vida](#modelos-e-ciclo-de-vida)
-- [Tecnologias Usadas e Dependencias](#tecnologias-usadas-e-dependencias)
+- [Tecnologias Usadas e Dependências](#tecnologias-usadas-e-dependências)
 
 ## Sobre
 
@@ -16,27 +16,29 @@ Este é um sistema web para criação e gerenciamento de chamados de suporte via
 
 O sistema possui rastreamento de chamados via prioridade, listagem por filtros, categorias de chamados e histórico de interações.
 
+[Link para o vídeo de apresentação](link do video)
+
 ## Mapa do Projeto
 
 [ToC](#toc)
 
 ```language
 .
+│
+├── README.md
 ├── AppDbContext.cs
-├── appsettings.Development.json
-├── appsettings.json
+├── Program.cs
+│
 ├── DeskFlow.csproj
-├── DeskFlow.http
-├── Migrations
+├── appsettings.json
+├── appsettings.Development.json
 │
 ├── Properties
 │   └── launchSettings.json
-│
-├─ README.md
-├── Program.cs
-│
 ├── Config
 │   └── ErroMiddleware.cs
+│
+├── Migrations
 │
 ├── Controllers
 │   ├── CategoriaController.cs
@@ -105,7 +107,7 @@ dotnet run
 
 Após isso, vai ficar disponivel no endereço http://localhost:5211/swagger/index.html uma página que mostra todos os endpoints do projeto.
 
-Todo endpoint do sistema esta atrás de http://localhost:5211/api, e a porta `5211` é configuravel em ./Properties/launchSettings.json em "http".
+Todo endpoint do sistema está atrás de http://localhost:5211/api, e a porta `5211` é configurável em ./Properties/launchSettings.json em "http".
 
 Para realizar requisições HTTP, você vai precisar de um cliente HTTP, como os abaixo:
 
@@ -124,20 +126,20 @@ Existem 3 modelos no projeto:
 - Categoria: a categoria do ticket. Possui uma relação 1:N com Chamado
 - Interacao: comentários de suporte. Possui relação N:1 com Chamado
 
-Além disso, Chamado tem um cíclo de vida seguindo o enum ChamadoStatus no arquivo Chamado.cs. Esse status é atualizado em Services/ChamadoService.cs, IniciarChamadoComIdAsync e EncerrarChamadoAsync.
+Além disso, Chamado tem um ciclo de vida seguindo o enum ChamadoStatus no arquivo Chamado.cs. Esse status é atualizado em Services/ChamadoService.cs, IniciarChamadoComIdAsync e EncerrarChamadoAsync.
 
 Por fim, há 3 "tipos" principais de DTO:
 
 - Padrão: utilizada principalmente para criação e atualização de entidades
 - Detalhes: mostram informações detalhadas sobre a entidade no banco
-- Lista: mostram a informação mais minimamente densa quanto possivel da entidade, utilizada principalmente para evitar problemas de referência circular
+- Lista: mostram a informação mais minimamente densa quanto possível da entidade, utilizada principalmente para evitar problemas de referência circular
 
-## Tecnologias Usadas e Dependencias
+## Tecnologias Usadas e Dependências
 
 [ToC](#toc)
 
 - .NET 10
-- ASP.NET 10
-- Sql Server 2025
+- ASP.NET Core 10
+- Sql Server
 - Entity Framework Core 10
 - Swagger & OpenAPI
