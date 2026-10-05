@@ -15,16 +15,14 @@ public class ExceptionHandlingMiddleware
       }
       catch(Exception e)
       {
-        var erro = context.RequestServices
-          .GetRequiredService<IHostEnvironment>()
-          .IsDevelopment()
-          ? new ErroDto($"Uma exceção aconteceu: {e.Message}", e.GetType().Name)
-          : new ErroDto($"Um erro aconteceu, contate o suporte.");
 
-        Console.WriteLine($"ERRO: {erro.Erro} - {erro.Tipo}");
+        var cliente = new ErroDto($"Um erro aconteceu, contate o suporte");
+        var desenvolvimento = new ErroDto($"Uma exceção aconteceu: {e.Message}", e.GetType().Name);
+
+        Console.WriteLine($"ERRO: {desenvolvimento.Erro} - tipo: {desenvolvimento.Tipo}\n\nStack Trace:\n{e.StackTrace}\n\nExcecao Interna: {e.InnerException?.Message}");
         // context.Response.StatusCode = 500; // WARN: Existe uma maneira mais explicita de fazer isto?
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        await context.Response.WriteAsJsonAsync(erro);
+        await context.Response.WriteAsJsonAsync(cliente);
       }
     }
 }
